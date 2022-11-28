@@ -1,0 +1,151 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: "seimyna";
+  src:url("fonts/seimyna.eot");
+  src:url("fonts/seimyna.eot?#iefix") format("embedded-opentype"),
+    url("fonts/seimyna.woff") format("woff"),
+    url("fonts/seimyna.ttf") format("truetype"),
+    url("fonts/seimyna.svg#seimyna") format("svg");
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+[data-icon]:before {
+  font-family: "seimyna" !important;
+  content: attr(data-icon);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+  font-family: "seimyna" !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-times:before {
+  content: "\61";
+}
+.icon-search:before {
+  content: "\62";
+}
+.icon-envelope:before {
+  content: "\63";
+}
+.icon-left-open-mini:before {
+  content: "\64";
+}
+.icon-right-open-mini:before {
+  content: "\66";
+}
+.icon-angle-down:before {
+  content: "\65";
+}
+.icon-angle-up:before {
+  content: "\67";
+}
+.icon-calendar-o:before {
+  content: "\69";
+}
+.icon-check:before {
+  content: "\68";
+}
+.icon-bars:before {
+  content: "\6a";
+}
+.icon-bold:before {
+  content: "\6b";
+}
+.icon-italic:before {
+  content: "\6c";
+}
+.icon-strikethrough:before {
+  content: "\6d";
+}
+.icon-list-ordered:before {
+  content: "\6e";
+}
+.icon-list-unordered:before {
+  content: "\6f";
+}
+.icon-quote:before {
+  content: "\70";
+}
+.icon-ellipsis-v:before {
+  content: "\71";
+}
+.icon-trash-o:before {
+  content: "\72";
+}
+.icon-pencil:before {
+  content: "\73";
+}
+.icon-lock:before {
+  content: "\74";
+}
+.icon-google-logo:before {
+  content: "\75";
+}
+.icon-widget:before {
+  content: "\76";
+}
+.icon-cogs:before {
+  content: "\77";
+}
+.icon-file-text-o:before {
+  content: "\78";
+}
+.icon-sync:before {
+  content: "\79";
+}
+.icon-plus:before {
+  content: "\7a";
+}
+.icon-bank:before {
+  content: "\41";
+}
+.icon-exchange:before {
+  content: "\42";
+}
+.icon-arrow-down:before {
+  content: "\43";
+}
+.icon-arrow-up:before {
+  content: "\44";
+}
+.icon-arrow-left:before {
+  content: "\45";
+}
+.icon-arrow-right:before {
+  content: "\46";
+}
+.icon-vallet:before {
+  content: "\47";
+}
+.icon-bell:before {
+  content: "\48";
+}
+.icon-braille:before {
+  content: "\49";
+}
+.icon-sign-out:before {
+  content: "\4a";
+}
+.icon-user:before {
+  content: "\4b";
+}

@@ -1,0 +1,26 @@
+input[type="text"],
+input[type="number"] {
+  @apply bg-transparent h-full font-semibold w-full;
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+.input {
+  &__container {
+    @apply flex items-center bg-white border rounded-md h-input px-3;
+    transition: border-color .25s;
+  }
+
+  &--focus {
+    .input__container {
+      @apply border-primary-500;
+    }
+
+    .input__append,
+    .input__prepend {
+      @apply text-primary-500;
+    }
+  }
+}

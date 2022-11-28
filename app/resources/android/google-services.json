@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "247988465437",
+    "project_id": "seimyna-e4ba1",
+    "storage_bucket": "seimyna-e4ba1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:247988465437:android:bc97304e81b2d13c6ebbf4",
+        "android_client_info": {
+          "package_name": "io.seimyna.seimyna"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "247988465437-mao7hf1ppprfp3r9dmbvjgt41ab8qg83.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.seimyna.seimyna",
+            "certificate_hash": "8b796bc52924551ee4c171663671aad4003def2a"
+          }
+        },
+        {
+          "client_id": "247988465437-topmo54n33fq1bsorvsl89ptuc8omijb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.seimyna.seimyna",
+            "certificate_hash": "aff6fdccad4a32354662c931df91d7a9575200c4"
+          }
+        },
+        {
+          "client_id": "247988465437-b3al5b7b2hqjqol6578qjv1buq7ina17.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB28uf4dX_TV_eWK6AgSamIUBsl6f0wpEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "247988465437-b3al5b7b2hqjqol6578qjv1buq7ina17.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

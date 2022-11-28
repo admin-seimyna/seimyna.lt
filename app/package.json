@@ -1,0 +1,70 @@
+{
+  "name": "io.seimyna.lt",
+  "displayName": "Seimyna.lt",
+  "version": "1.0.0",
+  "description": "Seimyna.lt",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "npm run development -- --watch",
+    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --config=webpack.config.js",
+    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --config=webpack.config.js",
+    "dev": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --config=webpack.config.js"
+  },
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "author": "Seimyna.lt",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@babel/core": "^7.17.8",
+    "@babel/preset-env": "^7.16.11",
+    "autoprefixer": "^10.4.13",
+    "axios": "^0.21",
+    "babel-loader": "^8.2.4",
+    "cordova-android": "^11.0.0",
+    "cordova-plugin-dialogs": "^2.0.2",
+    "cordova-plugin-firebase": "^2.0.5",
+    "cordova-plugin-firebase-messaging": "^7.0.4",
+    "cordova-plugin-statusbar": "^3.0.0",
+    "cordova-support-android-plugin": "~2.0.4",
+    "cross-env": "^7.0",
+    "css-loader": "^6.7.1",
+    "es6-promise-plugin": "^4.2.2",
+    "lodash": "^4.17.19",
+    "mini-css-extract-plugin": "^2.6.0",
+    "postcss": "^8.4.18",
+    "postcss-loader": "^6.2.1",
+    "resolve-url-loader": "^3.1.0",
+    "sass": "^1.42.1",
+    "sass-loader": "^8.0.2",
+    "sass-resources-loader": "^2.2.4",
+    "tailwindcss": "^3.2.1",
+    "url-loader": "^4.1.1",
+    "vue-loader": "^16.1.1",
+    "vue-template-compiler": "^2.6.14",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-manifest-plugin": "^5.0.0",
+    "webpack-nano": "^1.1.1"
+  },
+  "dependencies": {
+    "mini-svg-data-uri": "^1.4.4",
+    "vue": "^3.2.33",
+    "vue-i18n": "^9.1.10",
+    "vue-router": "^4.0.15",
+    "vuex": "^4.0.2"
+  },
+  "browser": {
+    "fs": false
+  },
+  "cordova": {
+    "platforms": [
+      "android"
+    ],
+    "plugins": {
+      "cordova-plugin-statusbar": {}
+    }
+  }
+}

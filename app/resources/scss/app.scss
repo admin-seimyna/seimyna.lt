@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+$icons-font: 'seimyna';
+$font-family: 'Inter';
+
+@import 'bootstrap/reset';
+@import 'bootstrap/icons/styles.css';
+
+@import 'theme/modal';
+@import 'theme/spinner';
+@import 'theme/button';
+@import 'theme/input';

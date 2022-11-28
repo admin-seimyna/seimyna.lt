@@ -1,0 +1,126 @@
+.is-button,
+.button {
+    @apply cursor-pointer rounded-md flex items-center whitespace-nowrap;
+}
+
+.button {
+    @apply px-5 h-input text-xs font-semibold leading-5;
+
+    .button__spinner {
+        @apply w-5 h-5;
+    }
+
+    &.progress,
+    &.disabled {
+        @apply pointer-events-none shadow-none;
+    }
+
+    &.disabled {
+        @apply opacity-50;
+    }
+
+    &--sm {
+        @apply h-7;
+
+        .button__spinner {
+            @apply w-5 h-5;
+        }
+    }
+
+    &--lg {
+        @apply h-11 px-6 text-normal;
+
+        .button__spinner {
+            @apply w-6 h-6;
+        }
+    }
+
+    &--xl {
+        @apply h-14 px-7 text-normal;
+
+        .button__spinner {
+            @apply w-7 h-7;
+        }
+    }
+
+
+    &--basic {
+        @apply bg-white hover:bg-gray-100;
+    }
+
+    &--primary,
+    &--danger,
+    &--success {
+        @apply text-white;
+
+        .button__spinner circle {
+            stroke: theme('colors.white');
+        }
+    }
+
+    &--basic {
+        &.button--soft {
+            @apply bg-gray-100 hover:bg-gray-200;
+        }
+
+        .button__spinner circle {
+            stroke: theme('colors.text.normal');
+        }
+    }
+
+    &--primary {
+        @apply bg-primary-500 shadow-primary-500;
+
+        &.button--bordered {
+            @apply hover:bg-primary-50 border-primary-500 text-primary-500;
+        }
+
+        &.button--soft {
+            @apply bg-primary-100 hover:bg-primary-200 text-primary-700;
+        }
+
+        &.button--shadow {
+            @apply shadow-primary-300;
+        }
+    }
+
+    &--danger {
+        @apply bg-danger-500;
+
+        &.button--bordered {
+            @apply hover:bg-danger-50 border-danger-500 text-danger-500;
+        }
+
+        &.button--soft {
+            @apply bg-danger-100 hover:bg-danger-200 text-danger-700;
+        }
+
+        &.button--shadow {
+            @apply shadow-danger-300;
+        }
+    }
+
+    &--success {
+        @apply bg-success-500;
+
+        &.button--bordered {
+            @apply hover:bg-success-50 border-success-500 text-success-500;
+        }
+
+        &.button--soft {
+            @apply bg-success-100 hover:bg-success-200 text-success-700;
+        }
+
+        &.button--shadow {
+            @apply shadow-success-300;
+        }
+    }
+
+    &--shadow {
+        @apply shadow-md;
+    }
+
+    &--bordered {
+        @apply bg-transparent border border-solid;
+    }
+}

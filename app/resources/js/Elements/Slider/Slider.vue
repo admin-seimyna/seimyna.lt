@@ -3,9 +3,9 @@
          class="slider w-full h-full flex"
          :class="[`slider-${id}`,{
             'flex-col': !horizontal,
-            'overflow-hidden': isScrolling,
-            'overflow-y-auto': !isScrolling && !horizontal,
-            'overflow-x-auto': !isScrolling && horizontal
+            'overflow-hidden': isScrolling || disableUserInteraction,
+            'overflow-y-auto': !isScrolling && !horizontal && !disableUserInteraction,
+            'overflow-x-auto': !isScrolling && horizontal && !disableUserInteraction
          }]"
     >
         <SliderSlide v-for="(slide, index) in slides"
@@ -40,6 +40,7 @@ export default {
             default: 50
         },
         horizontal: Boolean,
+        disableUserInteraction: Boolean,
     },
 
     setup(props, { emit }) {
@@ -55,8 +56,11 @@ export default {
         const scrollDirection = props.horizontal ? 'scrollLeft' : 'scrollTop';
 
         function setup() {
-            sliderRef.value.addEventListener('touchstart', onTouchStart, false);
-            sliderRef.value.addEventListener('scroll', onScroll, false);
+            if (!props.disableUserInteraction) {
+                sliderRef.value.addEventListener('touchstart', onTouchStart, false);
+                sliderRef.value.addEventListener('scroll', onScroll, false);
+            }
+
             slides.splice(0, slides.length);
 
             Array.prototype.slice.call(sliderRef.value.querySelectorAll(`.slider-slide-${id}`)).forEach((slide) => {
@@ -178,6 +182,11 @@ export default {
             sliderRef,
             isScrolling,
             scrollTo,
+            slideTo(name) {
+                const index = props.slides.findIndex(slide => slide.name === name);
+                if (index === -1) return;
+                scrollTo(index);
+            }
         }
     }
 }

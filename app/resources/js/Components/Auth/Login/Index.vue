@@ -1,33 +1,50 @@
 <template>
-    <div class="flex flex-col p-10">
-        <VForm action="/test">
-            <template #default="{errors, data, progress}">
-                <VInput name="email" title="Email" />
+    <Slider ref="sliderRef"
+            :slides="slides"
+            disable-user-interaction
+    >
+        <template #login>
+            <div class="w-full flex flex-col items-center justify-center">
+                <h1>Prisijungimas</h1>
 
-                <VButton class="mt-5" primary :progress="progress">Submit</VButton>
-            </template>
-        </VForm>
-        <VButton class="mt-5" primary @click="send">Submit</VButton>
-    </div>
+                <LoginForm
+                    @reset="slideTo('resetPassword')"
+                />
+
+                <SocialLogin class="mt-8" />
+            </div>
+        </template>
+
+        <template #resetPassword>
+            <ResetPassword @back="slideTo('login')" />
+        </template>
+    </Slider>
 </template>
 <script>
 
-import {inject} from 'vue';
-import VInput from '@/Elements/Input';
-import VButton from '@/Elements/Button';
-import VForm from '@/Elements/Form';
-import axios from 'axios';
+import Slider from '@/Elements/Slider/Slider';
+import VImage from '@/Elements/Image';
+import LoginForm from '@/Components/Auth/Login/LoginForm';
+import SocialLogin from '@/Components/Auth/Login/SocialLogin';
+import {ref} from 'vue';
+import ResetPassword from '@/Components/Auth/Login/ResetPassword';
 
 export default {
     name: 'Login',
-    components: {VForm, VButton, VInput},
+    components: {ResetPassword, SocialLogin, LoginForm, VImage, Slider },
     setup(props) {
-        const app = inject('app');
+        const sliderRef = ref(null);
         return {
-            send() {
-                axios.post('/test', { name: 1}).then((payload) => {
-                    console.log(payload);
-                });
+            sliderRef,
+            slides: [
+                {
+                    name: 'login'
+                }, {
+                    name: 'resetPassword'
+                }
+            ],
+            slideTo(name) {
+                sliderRef.value.slideTo(name);
             }
         }
     }

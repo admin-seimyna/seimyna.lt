@@ -45,7 +45,7 @@
 
 
     &--basic {
-        @apply bg-white hover:bg-gray-100;
+        @apply bg-white;
     }
 
     &--primary,
@@ -60,7 +60,7 @@
 
     &--basic {
         &.button--soft {
-            @apply bg-gray-100 hover:bg-gray-200;
+            @apply bg-gray-100;
         }
 
         .button__spinner circle {

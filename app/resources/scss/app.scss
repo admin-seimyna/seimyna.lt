@@ -6,8 +6,11 @@ $icons-font: 'seimyna';
 $font-family: 'Inter';
 
 @import 'bootstrap/reset';
-@import 'bootstrap/icons/styles.css';
+@import 'bootstrap/icons/styles.scss';
+@import 'theme/icon';
 
+@import 'theme/typography';
+@import 'theme/helpers';
 @import 'theme/modal';
 @import 'theme/spinner';
 @import 'theme/button';

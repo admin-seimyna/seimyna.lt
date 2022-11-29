@@ -3,3 +3,4 @@ app/platforms
 app/plugins
 app/www/css
 app/www/js
+app/resources/js/i18n/messages.json

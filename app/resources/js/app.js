@@ -8,7 +8,7 @@ createApp(App)
         routes,
         name: 'app',
         http: {
-            host: 'http://192.168.68.107/api'
+            host: 'http://192.168.68.107/api',
         },
         splashscreen: {
             delay: 300

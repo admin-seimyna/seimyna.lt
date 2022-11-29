@@ -21,6 +21,7 @@ class Seimyna
     notification; // FCM
     back; //back button
     statusbar; // cordova status bar
+    lang; // i18b
 
     constructor(app, options) {
         this.app = app;
@@ -49,6 +50,7 @@ class Seimyna
         this.statusbar = new AppStatusBar(this.options.statusBarColor, this.options.statusBarStyle);
         this.back = new BackButton();
         this.splash = new Splash();
+        this.lang = new Lang(this.options.i18n.locale);
         this.formatter = new Formatter(this.options.i18n.locale, this.options.formatter);
         this.http = new Http(this.options.http);
         this.dialog = new Dialog();

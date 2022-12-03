@@ -1,5 +1,5 @@
 import {createI18n} from 'vue-i18n';
-import messages from './../i18n.json';
+import messages from './../i18n/messages.json';
 
 export default class Locale {
     options; // options

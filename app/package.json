@@ -50,6 +50,7 @@
     "webpack-nano": "^1.1.1"
   },
   "dependencies": {
+    "before-build-webpack": "^0.2.13",
     "mini-svg-data-uri": "^1.4.4",
     "vue": "^3.2.33",
     "vue-i18n": "^9.1.10",

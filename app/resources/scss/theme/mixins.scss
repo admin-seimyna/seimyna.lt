@@ -1,0 +1,7 @@
+@mixin primaryGradiend {
+  background: rgb(99, 102, 241);
+  background: -moz-linear-gradient(147deg, rgba(99, 102, 241, 1) 0%, rgba(147, 7, 232, 1) 100%);
+  background: -webkit-linear-gradient(147deg, rgba(99, 102, 241, 1) 0%, rgba(147, 7, 232, 1) 100%);
+  background: linear-gradient(147deg, rgba(99, 102, 241, 1) 0%, rgba(147, 7, 232, 1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#6366f1", endColorstr="#9307e8", GradientType=1);
+}

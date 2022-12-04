@@ -115,6 +115,9 @@
       <excludeFolder url="file://$MODULE_DIR$/project/vendor/voku/portable-ascii" />
       <excludeFolder url="file://$MODULE_DIR$/project/vendor/phpoption/phpoption" />
       <excludeFolder url="file://$MODULE_DIR$/project/vendor/symfony/event-dispatcher-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/project/vendor/lcobucci/jwt" />
+      <excludeFolder url="file://$MODULE_DIR$/project/vendor/namshi/jose" />
+      <excludeFolder url="file://$MODULE_DIR$/project/vendor/tymon/jwt-auth" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

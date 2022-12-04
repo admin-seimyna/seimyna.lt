@@ -1,29 +1,45 @@
 <template>
-    <div class="input w-full flex flex-col items-center"
-         :class="{'input--focus': focused}"
+    <div class="input"
+         :class="{
+            'input--focus': focused,
+            'input--error': hasError,
+        }"
     >
-        <div class="input__container w-full">
-            <div v-if="hasPrependSlot"
-                 class="input__prepend flex items-center pr-2"
+        <div class="input__wrapper">
+            <label :for="name"
+                   class="text-xs font-semibold mt-2 ml-3 text-text-light"
             >
-                <slot name="prepend" />
-            </div>
-            <input :name="name"
-                   :type="type"
-                   :placeholder="placeholder"
-                   @focus="onFocus"
-                   @blur="onBlur"
-            />
-            <div v-if="hasAppendSlot"
-                 class="input__append flex items-center pl-2"
-            >
-                <slot name="append" />
+                {{ label }}
+            </label>
+
+            <div class="input__container w-full">
+                <div v-if="hasPrependSlot"
+                     class="input__prepend flex items-center pr-2"
+                >
+                    <slot name="prepend" />
+                </div>
+                <input :name="name"
+                       :type="type"
+                       :placeholder="placeholder"
+                       @focus="onFocus"
+                       @blur="onBlur"
+                />
+                <div v-if="hasAppendSlot"
+                     class="input__append flex items-center pl-2"
+                >
+                    <slot name="append" />
+                </div>
             </div>
         </div>
+
+        <span v-if="hasError"
+              class="w-full flex text-danger-500 mt-1 text-xs font-semibold"
+        >{{ errorMessage }}</span>
     </div>
 </template>
 <script>
 import {computed, ref} from 'vue';
+import { useI18n } from 'vue-i18n';
 
 export default {
     name: 'VInput',
@@ -34,13 +50,29 @@ export default {
             default: 'text',
         },
         name: String,
+        error: String,
+        errors: Object,
     },
     setup(props, { slots, emit }) {
         const focused = ref(false);
+        const { t } = useI18n();
+        const errorMessage = computed(() => {
+            if (!props.error && !props.errors) return null;
+            if (props.error) return props.error;
+            return props.errors[props.name];
+        });
+        const label = computed(() => {
+            return props.title || t(`field.title.${props.name}`);
+        });
 
         return {
+            label,
+            errorMessage,
+            hasError: computed(() => {
+                return !!errorMessage.value;
+            }),
             placeholder: computed(() => {
-                return `${props.title}...`;
+                return `${props.placeholder || t('field.placeholder.insert')}...`;
             }),
             focused,
             hasAppendSlot: computed(() => {

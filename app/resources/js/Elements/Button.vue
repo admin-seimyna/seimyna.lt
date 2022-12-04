@@ -4,7 +4,9 @@
                :class="{
                  progress,
                  disabled,
+                 'button--rounded': rounded,
                  'button--primary': primary,
+                 'button--warning': warning,
                  'button--shadow': shadow,
                  'button--basic': basic,
                  'button--bordered': bordered,
@@ -31,9 +33,11 @@ export default {
         progress: Boolean,
         disabled: Boolean,
         primary: Boolean,
+        warning: Boolean,
         shadow: Boolean,
         basic: Boolean,
         bordered: Boolean,
+        rounded: Boolean,
         soft: Boolean,
         center: {
             type: Boolean,

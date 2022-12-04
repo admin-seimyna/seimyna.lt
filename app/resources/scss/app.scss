@@ -9,9 +9,12 @@ $font-family: 'Inter';
 @import 'bootstrap/icons/styles.scss';
 @import 'theme/icon';
 
+@import 'theme/mixins';
 @import 'theme/typography';
 @import 'theme/helpers';
 @import 'theme/modal';
 @import 'theme/spinner';
 @import 'theme/button';
 @import 'theme/input';
+@import 'theme/page';
+@import 'theme/gradient';

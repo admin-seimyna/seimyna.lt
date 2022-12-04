@@ -6,16 +6,26 @@ input[type="number"] {
   &:focus {
     outline: 0;
   }
+
+  &::placeholder {
+    @apply font-thin;
+  }
 }
 
 .input {
+  @apply w-full flex flex-col;
+
+  &__wrapper {
+    @apply flex flex-col bg-white border rounded-md;
+  }
+
   &__container {
-    @apply flex items-center bg-white border rounded-md h-input px-3;
+    @apply flex items-center h-input px-3;
     transition: border-color .25s;
   }
 
   &--focus {
-    .input__container {
+    .input__wrapper {
       @apply border-primary-500;
     }
 
@@ -24,4 +34,16 @@ input[type="number"] {
       @apply text-primary-500;
     }
   }
+
+  &--error {
+    .input__wrapper {
+      @apply border-danger-500;
+    }
+
+    .input__append,
+    .input__prepend {
+      @apply text-danger-500;
+    }
+  }
+
 }

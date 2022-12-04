@@ -23,7 +23,8 @@ export default class Http {
     _setupRequest(options) {
         axios.interceptors.request.use((request) => {
             let url = options.host;
-            url += request.url === '/' ? '' : request.url;
+            const requestUrl = request.url.replace(options.host, '');
+            url += requestUrl === '/' ? '' : requestUrl;
             request.url = url;
 
             if (this.token) {

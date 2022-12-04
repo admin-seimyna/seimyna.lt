@@ -4,7 +4,7 @@
 }
 
 .button {
-    @apply px-5 h-input text-xs font-semibold leading-5;
+    @apply text-xs font-semibold leading-5;
 
     .button__spinner {
         @apply w-5 h-5;
@@ -17,6 +17,14 @@
 
     &.disabled {
         @apply opacity-50;
+    }
+
+    &--rounded {
+        @apply rounded-full;
+    }
+
+    &:not(.button--rounded) {
+        @apply px-5 h-input;
     }
 
     &--sm {
@@ -50,7 +58,8 @@
 
     &--primary,
     &--danger,
-    &--success {
+    &--success,
+    &--warning {
         @apply text-white;
 
         .button__spinner circle {
@@ -81,6 +90,24 @@
 
         &.button--shadow {
             @apply shadow-primary-300;
+        }
+    }
+
+    &--warning {
+        &:not(.button--bordered) {
+            @apply bg-warning-500 shadow-warning-300;
+        }
+
+        &.button--bordered {
+            @apply hover:bg-warning-50 border-warning-500 text-warning-500;
+        }
+
+        &.button--soft {
+            @apply bg-primary-100 hover:bg-warning-200 text-warning-700;
+        }
+
+        &.button--shadow {
+            @apply shadow-warning-300;
         }
     }
 
@@ -121,6 +148,9 @@
     }
 
     &--bordered {
-        @apply bg-transparent border border-solid;
+        @apply border border-solid;
+        &:not([class*="bg-"]) {
+            @apply bg-transparent;
+        }
     }
 }

@@ -13,7 +13,7 @@ class in18Compiler {
     }
 
     apply(compiler) {
-        compiler.hooks.thisCompilation.tap('in18Compiler', (compilation) => {
+        compiler.hooks.done.tap('in18Compiler', () => {
             const output = {};
             this.languages.forEach((lang) => {
                 output[lang] = {};

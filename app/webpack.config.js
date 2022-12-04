@@ -3,7 +3,6 @@ const svgToMiniDataURI = require('mini-svg-data-uri');
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 const src = path.join(__dirname, '/resources');
-const in18Compiler = require('./resources/js/Utilities/i18nCompiler');
 
 const production = process.env.NODE_ENV === 'production';
 
@@ -100,8 +99,8 @@ module.exports = {
             },
         },
     },
+
     plugins: [
-        new in18Compiler(['en', 'lt'], '../i18n/'),
         new VueLoaderPlugin(),
         new MiniCSSExtractPlugin({
             filename: production ? 'css/[name].[chunkhash].css' : 'css/[name].css',

@@ -2,3 +2,8 @@
   @extend .icon-arr-right;
   transform: rotate(90deg);
 }
+
+.icon-arr-left {
+  @extend .icon-arr-right;
+  transform: rotate(180deg);
+}

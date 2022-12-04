@@ -1,25 +1,49 @@
 <template>
-    <VForm action="/reset-password"
-           class="w-full px-10 flex flex-col"
-    >
-        <VInput name="email"
-                title="El. paštas"
-        >
-            <template #prepend>
-                <i class="icon-envelope" />
-            </template>
-        </VInput>
+    <div class="bubble-bottom-right w-full flex flex-col justify-center items-center p-10 overflow-hidden">
+        <div class="flex flex-col">
+            <span class="h1 text-xxxl text-primary-500 leading-9 mb-5">
+                {{ $t('auth.title.reset-password') }}
+            </span>
 
-        <VButton>Siųsti</VButton>
-        <span class="linked" @click="emit('back')">Back</span>
-    </VForm>
+            <VForm action="/reset-password"
+                   class="w-full p-10 flex flex-col bg-white rounded-md shadow-xl"
+            >
+                <p class="text-text-normal">
+                    {{ $t('auth.message.reset-password-instruction') }}
+                </p>
+
+                <VInput name="email"
+                        class="mt-5"
+                >
+                    <template #prepend>
+                        <i class="icon-envelope" />
+                    </template>
+                </VInput>
+
+                <VButton primary
+                         shadow
+                         class="mt-5"
+                >
+                    {{ $t('auth.button.send') }}
+                </VButton>
+            </VForm>
+        </div>
+
+        <VButton rounded
+                 @click="emit('back')"
+                 class="w-16 h-16 bg-white shadow-xl mt-10"
+        >
+            <i class="icon-arr-right text-primary-500 text-xl" />
+        </VButton>
+    </div>
+
 </template>
 <script>
 import VForm from '@/Elements/Form';
 import VInput from '@/Elements/Input';
 import VButton from '@/Elements/Button';
 export default {
-    name: 'ResetPassword',
+    name: 'ResetPasswordForm',
     components: {VButton, VInput, VForm},
     emits: ['back'],
     setup(props, { emit }) {

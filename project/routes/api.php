@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/test', function() {
-    return new \Illuminate\Http\JsonResponse(['test' => 'super duper!']);
+Route::group(['prefix' => 'auth', 'as' => 'auth.', 'middleware' => 'guest'], function() {
+    Route::post('signup', [\App\Http\Controllers\Api\Auth\SignupController::class, 'post'])->name('signup');
 });

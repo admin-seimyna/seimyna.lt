@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ApiResponse
 {
@@ -23,6 +24,12 @@ class ApiResponse
      * @var Builder
      */
     protected Builder $builder;
+
+
+    /**
+     * @var array
+     */
+    protected array $policies = [];
 
     /**
      * @return static
@@ -66,6 +73,21 @@ class ApiResponse
     }
 
     /**
+     * @param string $method
+     * @param $arguments
+     * @return $this
+     */
+    public function authorize(string $method, $arguments): self
+    {
+        $response = Gate::inspect($method, $arguments);
+        if (!$response->allowed()) {
+            abort($response->code(), $response->message());
+        }
+
+        return $this;
+    }
+
+    /**
      * @param $filter
      * @return $this
      */
@@ -86,10 +108,11 @@ class ApiResponse
     }
 
     /**
+     * @param int $code
      * @return JsonResponse
      */
-    public function json(): JsonResponse
+    public function json(int $code = 200): JsonResponse
     {
-        return new JsonResponse($this->data);
+        return new JsonResponse($this->data, $code);
     }
 }

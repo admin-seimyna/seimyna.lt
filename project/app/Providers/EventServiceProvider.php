@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Models\Family\Family;
 use App\Models\User;
+use App\Models\Verification;
 use App\Observers\FamilyObserver;
 use App\Observers\UserObserver;
+use App\Observers\VerificationObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -33,5 +35,6 @@ class EventServiceProvider extends ServiceProvider
     {
         Family::observe(FamilyObserver::class);
         User::observe(UserObserver::class);
+        Verification::observe(VerificationObserver::class);
     }
 }

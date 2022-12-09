@@ -14,6 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => 'auth', 'as' => 'auth.', 'middleware' => 'guest'], function() {
+Route::group(['prefix' => 'auth', 'as' => 'auth.'], function() {
     Route::post('signup', [\App\Http\Controllers\Api\Auth\SignupController::class, 'post'])->name('signup');
+});
+
+
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::group(['prefix' => 'verify', 'as' => 'verify.'], function() {
+        Route::post('{type}/{not_verified_verification:token}', [\App\Http\Controllers\Api\VerificationController::class, 'post'])->name('post');
+    });
 });

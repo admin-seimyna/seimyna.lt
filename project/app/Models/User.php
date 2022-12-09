@@ -6,6 +6,7 @@ use App\Models\Family\Family;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
@@ -15,8 +16,6 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
-
-    protected $connection = 'main';
 
     /**
      * The attributes that are mass assignable.
@@ -82,5 +81,13 @@ class User extends Authenticatable implements JWTSubject
     public function family(): BelongsToMany
     {
         return $this->belongsToMany(Family::class, 'seimyna.family_users');
+    }
+
+    /**
+     * @return MorphOne
+     */
+    public function verification(): MorphOne
+    {
+        return $this->morphOne(Verification::class, 'module');
     }
 }

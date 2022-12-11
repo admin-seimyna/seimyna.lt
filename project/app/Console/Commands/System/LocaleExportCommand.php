@@ -50,6 +50,6 @@ class LocaleExportCommand extends Command
                 });
         });
 
-        Storage::disk('app-resources')->put('js/i18n/messages.json', json_encode($translations));
+        Storage::disk('app-resources')->put('js/i18n.json', json_encode($translations));
     }
 }

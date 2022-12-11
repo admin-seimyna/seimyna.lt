@@ -1,5 +1,4 @@
 import {createI18n} from 'vue-i18n';
-import messages from './../i18n/messages.json';
 
 export default class Locale {
     options; // options
@@ -11,6 +10,7 @@ export default class Locale {
     constructor(options = {}) {
         this.options = Object.assign({
             locale: 'en',
+            translations: {},
         }, options);
     }
 
@@ -20,7 +20,7 @@ export default class Locale {
      */
     getI18n() {
         return createI18n(Object.assign(this.options, {
-            messages
+            messages: this.options.translations,
         }));
     }
 }

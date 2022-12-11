@@ -20,6 +20,7 @@ export default class AppStatusBar {
      * @param style
      */
     setStyle(style) {
+        if (typeof StatusBar === 'undefined') return;
         switch (style) {
             case 'lightcontent': StatusBar.styleLightContent(); break;
             case 'blacktranslucent': StatusBar.styleBlackTranslucent(); break;
@@ -32,6 +33,7 @@ export default class AppStatusBar {
      * @param color
      */
     setColor(color) {
+        if (typeof StatusBar === 'undefined') return;
         StatusBar.backgroundColorByHexString(color);
         StatusBar.styleDefault();
     }
@@ -40,6 +42,7 @@ export default class AppStatusBar {
      * Hide status bar
      */
     hide() {
+        if (typeof StatusBar === 'undefined') return;
         StatusBar.hide();
     }
 
@@ -47,6 +50,7 @@ export default class AppStatusBar {
      * Show status bar
      */
     show() {
+        if (typeof StatusBar === 'undefined') return;
         StatusBar.show();
     }
 
@@ -54,6 +58,7 @@ export default class AppStatusBar {
      * Set overlay
      */
     overlay(status) {
+        if (typeof StatusBar === 'undefined') return;
         StatusBar.overlaysWebView(status);
     }
 }

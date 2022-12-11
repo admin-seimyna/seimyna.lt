@@ -1,18 +1,21 @@
 import axios from 'axios';
+import {isObject} from 'lodash';
 
 export default class Http {
-    token; // JWT token
-    tokenType = 'bearer'; // JWT token type
+    store; // Vuex  store
 
     /**
      * Constructor
      * @param options
+     * @param store
      */
-    constructor(options) {
+    constructor(options, store) {
+        this.store = store;
         axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
         axios.defaults.timeoutErrorMessage = 'timeout';
 
         this._setupRequest(options);
+        this._setupResponse();
     }
 
     /**
@@ -27,13 +30,34 @@ export default class Http {
             url += requestUrl === '/' ? '' : requestUrl;
             request.url = url;
 
-            if (this.token) {
-                request.headers.Authorization = `${this.tokenType} ${this.token}`;
+            const token = this.store.getters['auth/token'];
+            if (token) {
+                request.headers.Authorization = `bearer ${token}`;
             }
 
             return request;
         },error => {
             console.log('axiosRequestError', error);
+            return Promise.reject(error);
+        });
+    }
+
+    _setupResponse() {
+        axios.interceptors.response.use((response) => {
+            const data = response.data;
+            if (isObject(data)) {
+                Object.keys(data).forEach((key) => {
+                    if (this.store._mutations[key]) {
+                        this.store.commit(key, data[key]);
+                    }
+                });
+            }
+            return response;
+        }, (error) => {
+            const response = error.response;
+            if (response.status === 500) {
+                alert(JSON.stringify(response.data));
+            }
             return Promise.reject(error);
         });
     }

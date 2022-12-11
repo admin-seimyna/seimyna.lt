@@ -1,5 +1,7 @@
 <template>
-    <div class="bubble-bottom-right w-full flex flex-col justify-center items-center p-10 overflow-hidden">
+    <VPage bubble-bottom-right
+           class="justify-center items-center p-10 overflow-hidden"
+    >
         <div class="flex flex-col">
             <span class="h1 text-xxxl text-primary-500 leading-9 mb-5">
                 {{ $t('auth.title.reset-password') }}
@@ -35,16 +37,17 @@
         >
             <i class="icon-arr-right text-primary-500 text-xl" />
         </VButton>
-    </div>
+    </VPage>
 
 </template>
 <script>
 import VForm from '@/Elements/Form';
 import VInput from '@/Elements/Input';
 import VButton from '@/Elements/Button';
+import VPage from '@/Elements/Page';
 export default {
     name: 'ResetPasswordForm',
-    components: {VButton, VInput, VForm},
+    components: {VPage, VButton, VInput, VForm},
     emits: ['back'],
     setup(props, { emit }) {
         return {

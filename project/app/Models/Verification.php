@@ -7,16 +7,35 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Facades\Hash;
 
 class Verification extends Model
 {
     use HasFactory;
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'module_type',
         'module_id',
         'code',
         'type',
+    ];
+
+    /**
+     * @var string[]
+     */
+    protected $hidden = [
+        'code',
+        'verified_at',
+        'module_type',
+        'module_id'
+    ];
+
+    protected $appends = [
+        'is_verified',
+        'is_expired'
     ];
 
     /**
@@ -52,18 +71,29 @@ class Verification extends Model
     }
 
     /**
-     * @param int $code
-     */
-    public function setOriginalCode(int $code): void
-    {
-        $this->originalCode = $code;
-    }
-
-    /**
      * @return int|null
      */
     public function getOriginalCode(): ?int
     {
+        return $this->originalCode;
+    }
+
+    /**
+     * @return int
+     */
+    public function generateCode(): int
+    {
+        $length = config('auth.verification.code_length');
+        $from = '';
+        $to = '';
+        for($x = 0; $x < $length; $x++) {
+            $from .= '1';
+            $to .= '9';
+        }
+
+        $this->originalCode = rand((int)$from, (int)$to);
+        $this->expires_in = Carbon::now()->addDay();
+        $this->code = Hash::make($this->originalCode);
         return $this->originalCode;
     }
 
@@ -74,5 +104,21 @@ class Verification extends Model
     {
         $this->verified_at = Carbon::now();
         return $this->update();
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsVerifiedAttribute(): bool
+    {
+        return !empty($this->verified_at);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsExpiredAttribute(): bool
+    {
+        return Carbon::now()->isAfter($this->expires_in);
     }
 }

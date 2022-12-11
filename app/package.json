@@ -65,7 +65,8 @@
       "android"
     ],
     "plugins": {
-      "cordova-plugin-statusbar": {}
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-dialogs": {}
     }
   }
 }

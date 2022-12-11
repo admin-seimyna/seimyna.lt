@@ -23,8 +23,9 @@ class VerifyTest extends TestCase
         $this->post(route('api.verify.post', [
             'type' => VerificationTypesEnum::EMAIL,
             'not_verified_verification' => $verification->token
-        ]), ['code' => $verification->getOriginalCode()])
-            ->assertStatus(200);
+        ]), ['code' => str_split((string)$verification->getOriginalCode())])
+            ->assertStatus(200)
+            ->assertJsonStructure(['auth/verification']);
 
         $this->assertNotEmpty(Verification::first()->verified_at);
     }
@@ -40,7 +41,8 @@ class VerifyTest extends TestCase
         $this->post(route('api.verify.post', [
             'type' => VerificationTypesEnum::EMAIL,
             'not_verified_verification' => $verification->token
-        ]), ['code' => $verification->getOriginalCode()])->assertStatus(404);
+        ]), ['code' => str_split((string)$verification->getOriginalCode())])
+            ->assertStatus(404);
     }
 
     public function testCannotAccessWithExpiredVerification()
@@ -54,7 +56,8 @@ class VerifyTest extends TestCase
         $this->post(route('api.verify.post', [
             'type' => VerificationTypesEnum::EMAIL,
             'not_verified_verification' => $verification->token
-        ]), ['code' => $verification->getOriginalCode()])->assertStatus(401);
+        ]), ['code' => str_split((string)$verification->getOriginalCode())])
+            ->assertStatus(401);
     }
 
     public function testCanNotAccessWithVerifiedVerification()
@@ -63,16 +66,55 @@ class VerifyTest extends TestCase
         $verification = $user->verification()->create(['type' => VerificationTypesEnum::EMAIL]);
         Auth::guard('api')->login($user);
 
+        $code = str_split((string)$verification->getOriginalCode());
+
         $this->post(route('api.verify.post', [
             'type' => VerificationTypesEnum::EMAIL,
             'not_verified_verification' => $verification->token
-        ]), ['code' => $verification->getOriginalCode()])
+        ]), ['code' => $code])
             ->assertStatus(200);
 
         $this->post(route('api.verify.post', [
             'type' => VerificationTypesEnum::EMAIL,
             'not_verified_verification' => $verification->token
-        ]), ['code' => $verification->getOriginalCode()])
+        ]), ['code' => $code])
             ->assertStatus(404);
+    }
+
+    public function testCanResend()
+    {
+        $user = User::factory()->create();
+        $verification = $user->verification()->create([
+            'type' => VerificationTypesEnum::EMAIL
+        ]);
+
+        $verification->updated_at = Carbon::now()->subMinutes(config('auth.verification.resend_period'));
+        $verification->touch();
+        Auth::guard('api')->login($user);
+
+        $code = str_split((string)$verification->getOriginalCode());
+
+        $this->post(route('api.verify.resend', [
+            'type' => VerificationTypesEnum::EMAIL,
+            'not_verified_verification' => $verification->token
+        ]), ['code' => $code])
+            ->assertStatus(200);
+    }
+
+    public function testResendAttempts()
+    {
+        $user = User::factory()->create();
+        $verification = $user->verification()->create([
+            'type' => VerificationTypesEnum::EMAIL
+        ]);
+        Auth::guard('api')->login($user);
+
+        $code = str_split((string)$verification->getOriginalCode());
+
+        $this->post(route('api.verify.resend', [
+            'type' => VerificationTypesEnum::EMAIL,
+            'not_verified_verification' => $verification->token
+        ]), ['code' => $code])
+            ->assertStatus(429);
     }
 }

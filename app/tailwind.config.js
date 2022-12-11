@@ -43,6 +43,8 @@ module.exports = {
       "fontSize": {
         "xxs": "0.7rem",
         "normal": "0.9rem",
+        "xl": "1.2rem",
+        "xxl": "1.6rem",
         "xxxl": "2.5rem",
       },
       "zIndex": {

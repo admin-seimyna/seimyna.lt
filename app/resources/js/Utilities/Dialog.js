@@ -1,5 +1,8 @@
 export default class Dialog {
-    constructor() {
+    t;
+
+    constructor(t) {
+        this.t = t;
     }
 
     /**
@@ -19,6 +22,20 @@ export default class Dialog {
             );
         });
 
+    }
+
+    /**
+     * Default app alert
+     * @param message
+     * @return {Promise<*>}
+     */
+    defaultAlert(message)
+    {
+        return this.alert(
+            this.t('common.title.alert'),
+            message,
+            this.t('common.button.close')
+        );
     }
 
     /**

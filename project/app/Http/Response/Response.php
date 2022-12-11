@@ -2,11 +2,13 @@
 
 namespace App\Http\Response;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Request;
+use App\Models\Scopes\VerifiedScope;
+use App\Models\User;
 
 class Response
 {
+    use ResponseTrait;
+
     /**
      * @return $this
      */
@@ -21,5 +23,22 @@ class Response
     public function get(): array
     {
         return [];
+    }
+
+    /**
+     * @param User|null $user
+     * @return array
+     */
+    protected function login(?User $user = null): array
+    {
+        $user = $user ?? $this->auth()->user();
+        return [
+            'auth/user' => $user->load([
+                'verification' => static function ($query) {
+                    $query->withoutGlobalScope(new VerifiedScope());
+                }
+            ]),
+            'auth/token' => $this->auth()->setTTl(config('jwt.long_term_token_ttl'))->login($user),
+        ];
     }
 }

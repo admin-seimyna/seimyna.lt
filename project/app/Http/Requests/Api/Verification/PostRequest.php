@@ -14,8 +14,18 @@ class PostRequest extends FormRequest
      */
     public function rules(): array
     {
+        $length = config('auth.verification.code_length');
         return [
-            'code' => 'required|numeric|min:111111|max:999999'
+            'code' => 'required|array|min:' . $length . '|max:' . $length,
+            'code.*' => 'numeric|min:1|max:9'
         ];
+    }
+
+    /**
+     * @return int
+     */
+    public function getCode(): int
+    {
+        return (int)implode('', $this->input('code'));
     }
 }

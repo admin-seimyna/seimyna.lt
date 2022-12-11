@@ -3,21 +3,29 @@
 namespace App\Http\Response\Api\Auth;
 
 use App\Enum\VerificationTypesEnum;
-use App\Http\Requests\Api\Auth\SignUpRequest;
+use App\Http\Response\ApiResponse;
 use App\Http\Response\Response;
 use App\Models\User;
-use App\Models\Verification;
-use Illuminate\Support\Facades\Auth;
 
 class SignUpResponse extends Response
 {
     /**
-     * @param SignUpRequest $request
+     * @var string|void
      */
-    public function __construct(SignUpRequest $request)
+    protected string $token;
+
+    /**
+     * @var User
+     */
+    protected User $user;
+
+    /**
+     * @param ApiResponse $response
+     */
+    public function __construct(ApiResponse $response)
     {
-        $this->user = User::create($request->getData());
-        $verification = $this->user->verification()->create(['type' => VerificationTypesEnum::EMAIL]);
+        $this->user = User::create($response->request->getData());
+        $this->user->verification()->create(['type' => VerificationTypesEnum::EMAIL]);
     }
 
     /**
@@ -25,8 +33,6 @@ class SignUpResponse extends Response
      */
     public function get(): array
     {
-        return [
-            'user' => $this->user->toArray()
-        ];
+        return $this->login($this->user);
     }
 }

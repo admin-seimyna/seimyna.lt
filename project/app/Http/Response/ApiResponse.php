@@ -10,15 +10,17 @@ use Illuminate\Support\Facades\Gate;
 
 class ApiResponse
 {
+    use ResponseTrait;
+
     /**
      * @var array
      */
-    protected array $data = [];
+    public array $data = [];
 
     /**
      * @var FormRequest|Request
      */
-    protected $request;
+    public $request;
 
     /**
      * @var Builder
@@ -65,10 +67,16 @@ class ApiResponse
      */
     public function handle($callback): self
     {
-        $arguments = func_get_args();
-        array_shift($arguments);
+        $data = is_string($callback) ? (new $callback($this))->get() : $callback($this);
+        if (!is_array($data) && method_exists($data, 'toArray')) {
+            $data = $data->toArray();
+        }
 
-        $this->data = $callback instanceof Response ? $callback->get() : $callback($this);
+        if (!is_array($data)) {
+            return $this;
+        }
+
+        $this->data = array_merge($this->data, $data);
         return $this;
     }
 

@@ -23,6 +23,7 @@ export default {
             type: String,
             default: 'post'
         },
+        stopLoadingOnSuccess: Boolean,
         data: Object,
         emits: [
             'error',
@@ -54,16 +55,19 @@ export default {
                         response = response.data ? response.data : response;
                         resolve(response);
                         emit('success', response);
+                        progress.value = false;
+                        if (props.stopLoadingOnSuccess) {
+                            emit('progress', false);
+                        }
                     }).catch((error) => {
-                    const response = error.response ? error.response : error;
-                    reject(response);
-                    if (!response.data) return;
-                    handleErrors(response.data.errors);
-                    emit('error', errors.value);
-                }).finally(() => {
-                    progress.value = false;
-                    emit('progress', false);
-                });
+                        const response = error.response ? error.response : error;
+                        reject(response);
+                        if (!response.data) return;
+                        handleErrors(response.data.errors);
+                        emit('error', errors.value);
+                        progress.value = false;
+                        emit('progress', false);
+                    });
             });
         }
 

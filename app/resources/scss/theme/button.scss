@@ -20,7 +20,7 @@
     }
 
     &--rounded {
-        @apply rounded-full;
+        @apply rounded-full shrink-0;
     }
 
     &:not(.button--rounded) {

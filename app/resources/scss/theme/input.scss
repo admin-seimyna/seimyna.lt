@@ -47,3 +47,16 @@ input[type="number"] {
   }
 
 }
+
+
+input[type="number"].verify {
+  @apply bg-transparent border-b-4 border-solid border-gray-600 text-center;
+  height: 40px;
+  width: 40px;
+  font-size: 2rem;
+
+  &:focus,
+  &--filled {
+    @apply border-primary-500 text-primary-500;
+  }
+}

@@ -1,6 +1,27 @@
+.page-enter-active,
+.page-leave-active {
+  position: fixed;
+  transition: opacity .15s ease, transform .15s ease;
+}
+
+.page-enter-active {
+  z-index: 9;
+}
+
+.page-enter-from {
+  transform: translateY(50%);
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+}
+
 .bubble-top-right,
 .bubble-bottom-right,
-.bubble-center-right {
+.bubble-center,
+.bubble-center-right,
+.bubble-top-center {
   &:before {
     content: '';
     box-shadow: 0 0 0 50px rgba(99, 102, 241, .07), 0 0 0 100px rgba(99, 102, 241, .03);
@@ -31,4 +52,23 @@
   right: -50%;
   bottom: -20%;
   border-top-left-radius: 50%;
+}
+
+.bubble-center:before {
+  @include primaryGradiend;
+  @apply absolute;
+  width: 150%;
+  padding-top: 150%;
+  border-radius: 50%;
+}
+
+.bubble-top-center:before {
+  @include primaryGradiend;
+  @apply absolute;
+  width: 150%;
+  padding-top: 150%;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
 }

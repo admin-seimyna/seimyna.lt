@@ -1,5 +1,5 @@
 <template>
-    <svg xmlns="http://www.w3.org/2000/svg" width="200" height="173" viewBox="0 0 200 173">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 173">
         <path class="logo-svg"
               :class="{
                     'fill-primary-500': primary,

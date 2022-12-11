@@ -32,17 +32,21 @@
             </div>
         </div>
 
-        <span v-if="hasError"
-              class="w-full flex text-danger-500 mt-1 text-xs font-semibold"
-        >{{ errorMessage }}</span>
+        <InputError
+            v-if="hasError"
+            :message="errorMessage"
+            class="mt-1"
+        />
     </div>
 </template>
 <script>
 import {computed, ref} from 'vue';
 import { useI18n } from 'vue-i18n';
+import InputError from '@/Elements/InputError';
 
 export default {
     name: 'VInput',
+    components: {InputError},
     props: {
         title: String,
         type: {

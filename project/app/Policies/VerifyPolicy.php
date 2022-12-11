@@ -25,7 +25,7 @@ class VerifyPolicy
         && VerificationTypesEnum::values()->contains($type)
         && $verification->type === $type && empty($verification->verified_at)
             ? Response::allow()
-            : Response::deny('Verification not found', 404);
+            : Response::deny(trans('auth.message.verification_not_found'), 404);
     }
 
     /**
@@ -37,6 +37,18 @@ class VerifyPolicy
     {
         return Carbon::now()->isBefore($verification->expires_in)
             ? Response::allow()
-            : Response::deny('Token is expired', 401);
+            : Response::deny(trans('auth.message.verification_expired'), 401);
+    }
+
+    /**
+     * @param User $user
+     * @param Verification $verification
+     * @return Response
+     */
+    public function resend(User $user, Verification $verification): Response
+    {
+        return Carbon::now()->isAfter(Carbon::parse($verification->updated_at)->addMinutes(config('auth.verification.resend_period')))
+            ? Response::allow()
+            : Response::deny(trans('auth.message.verification_to_many_attempts'), 429);
     }
 }

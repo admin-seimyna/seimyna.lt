@@ -35,6 +35,7 @@ return [
             'root' => storage_path('app'),
         ],
 
+
         'locale' => [
             'driver' => 'local',
             'root' => base_path('resources/lang'),

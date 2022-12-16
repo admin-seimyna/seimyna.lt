@@ -28,15 +28,37 @@ class VerificationMail extends Mailable
     protected string $type;
 
     /**
+     * @var string
+     */
+    protected string $token;
+
+    /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user, string $type, int $code)
+    public function __construct(User $user, string $type, int $code, string $token)
     {
         $this->user = $user;
         $this->type = $type;
         $this->code = $code;
+        $this->token = $token;
+    }
+
+    /***
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken(): string
+    {
+        return $this->token;
     }
 
     /**

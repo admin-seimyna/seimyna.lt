@@ -13,6 +13,8 @@ class Verification extends Model
 {
     use HasFactory;
 
+    protected $connection = 'main';
+
     /**
      * @var string[]
      */

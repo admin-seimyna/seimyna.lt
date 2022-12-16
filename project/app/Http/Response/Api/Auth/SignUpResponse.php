@@ -3,6 +3,7 @@
 namespace App\Http\Response\Api\Auth;
 
 use App\Enum\VerificationTypesEnum;
+use App\Events\NewUserRegistered;
 use App\Http\Response\ApiResponse;
 use App\Http\Response\Response;
 use App\Models\User;
@@ -25,7 +26,8 @@ class SignUpResponse extends Response
     public function __construct(ApiResponse $response)
     {
         $this->user = User::create($response->request->getData());
-        $this->user->verification()->create(['type' => VerificationTypesEnum::EMAIL]);
+        $verification = $this->user->verification()->create(['type' => VerificationTypesEnum::EMAIL]);
+        event(new NewUserRegistered($this->user, $verification));
     }
 
     /**

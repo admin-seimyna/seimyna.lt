@@ -2,14 +2,16 @@
 
 namespace App\Providers;
 
+use App\Events\NewUserRegistered;
+use App\Listeners\SendEmailVerificationCodeListener;
 use App\Models\Family\Family;
+use App\Models\Family\MemberInvitation;
 use App\Models\User;
 use App\Models\Verification;
 use App\Observers\FamilyObserver;
+use App\Observers\MemberInvitationObserver;
 use App\Observers\UserObserver;
 use App\Observers\VerificationObserver;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 
@@ -21,8 +23,8 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
-        Registered::class => [
-            SendEmailVerificationNotification::class,
+        NewUserRegistered::class => [
+            SendEmailVerificationCodeListener::class,
         ],
     ];
 
@@ -36,5 +38,6 @@ class EventServiceProvider extends ServiceProvider
         Family::observe(FamilyObserver::class);
         User::observe(UserObserver::class);
         Verification::observe(VerificationObserver::class);
+        MemberInvitation::observe(MemberInvitationObserver::class);
     }
 }

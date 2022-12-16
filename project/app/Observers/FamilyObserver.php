@@ -9,8 +9,9 @@ class FamilyObserver
     /**
      * @param Family $family
      */
-    public function creating(Family $family)
+    public function creating(Family $family): void
     {
-        $family->connection_name = mb_strtolower($family->name) . '_' . time();
+        $connection = app()->runningUnitTests() ? 'seimyna_test_family' : mb_strtolower($family->name) . '_' . time() . uniqid();
+        $family->connection_name = $connection;
     }
 }

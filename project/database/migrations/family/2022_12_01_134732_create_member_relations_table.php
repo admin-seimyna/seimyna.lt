@@ -16,7 +16,7 @@ class CreateMemberRelationsTable extends Migration
         Schema::create('family_member_relations', function (Blueprint $table) {
             $table->unsignedBigInteger('member_id');
             $table->unsignedBigInteger('related_to');
-            $table->enum('status', \App\Enum\MemberStatusEnum::values()->toArray());
+            $table->enum('status', \App\Enum\MemberRelationEnum::values()->toArray());
             $table->timestamps();
 
             $table->unique(['member_id', 'related_to']);

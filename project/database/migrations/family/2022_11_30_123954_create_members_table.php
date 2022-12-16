@@ -18,19 +18,22 @@ class CreateMembersTable extends Migration
             $table->unsignedBigInteger('family_id');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('name');
+            $table->enum('status', \App\Enum\MemberStatusEnum::values()->toArray());
             $table->timestamps();
 
-            $table->foreign('family_id')
-                ->references('id')
-                ->on('seimyna.families')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+            if (!app()->runningUnitTests()) {
+                $table->foreign('family_id')
+                    ->references('id')
+                    ->on('seimyna.families')
+                    ->cascadeOnUpdate()
+                    ->cascadeOnDelete();
 
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('seimyna.users')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                $table->foreign('user_id')
+                    ->references('id')
+                    ->on('seimyna.users')
+                    ->cascadeOnUpdate()
+                    ->cascadeOnDelete();
+            }
         });
     }
 

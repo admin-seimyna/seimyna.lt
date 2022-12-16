@@ -38,7 +38,7 @@ class Response
                     $query->withoutGlobalScope(new VerifiedScope());
                 }
             ]),
-            'auth/token' => $this->auth()->setTTl(config('jwt.long_term_token_ttl'))->login($user),
+            'auth/token' => $this->auth()->setTTl(config('jwt.long_term_ttl'))->login($user),
         ];
     }
 }

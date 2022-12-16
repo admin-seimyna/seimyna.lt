@@ -20,14 +20,22 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function() {
 });
 
 
-Route::group(['middleware' => 'auth:api'], function() {
+Route::group(['middl|eware' => 'auth:api'], function() {
+
+    // Logout
     Route::group(['prefix' => 'auth', 'as' => 'auth.'], function() {
         Route::post('logout', [\App\Http\Controllers\Api\Auth\AuthController::class, 'logout'])->name('logout');
     });
 
+    // Verifications
     Route::group(['prefix' => 'verify', 'as' => 'verify.'], function() {
         Route::get('{not_verified_verification:token}', [\App\Http\Controllers\Api\VerificationController::class, 'get'])->name('get');
         Route::post('{type}/{not_verified_verification:token}', [\App\Http\Controllers\Api\VerificationController::class, 'post'])->name('post');
         Route::post('{type}/{not_verified_verification:token}/resend', [\App\Http\Controllers\Api\VerificationController::class, 'resend'])->name('resend');
+    });
+
+    // Family
+    Route::group(['prefix' => 'family', 'as' => 'family.'], function () {
+        Route::post('create', [\App\Http\Controllers\Api\FamilyController::class, 'create'])->name('create');
     });
 });

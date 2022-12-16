@@ -3,11 +3,13 @@
 namespace Api;
 
 use App\Enum\VerificationTypesEnum;
+use App\Mail\VerificationMail;
 use App\Models\User;
 use App\Models\Verification;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class VerifyTest extends TestCase
@@ -83,6 +85,7 @@ class VerifyTest extends TestCase
 
     public function testCanResend()
     {
+        Mail::fake();
         $user = User::factory()->create();
         $verification = $user->verification()->create([
             'type' => VerificationTypesEnum::EMAIL
@@ -99,6 +102,10 @@ class VerifyTest extends TestCase
             'not_verified_verification' => $verification->token
         ]), ['code' => $code])
             ->assertStatus(200);
+
+        Mail::assertSent(VerificationMail::class, function ($mail) use ($user) {
+            return $mail->getUser()->id === $user->id;
+        });
     }
 
     public function testResendAttempts()

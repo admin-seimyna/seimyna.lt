@@ -69,7 +69,8 @@ class VerificationController extends Controller
                     new VerificationMail(
                         $apiResponse->user(),
                         $verification->type,
-                        $verification->getOriginalCode()
+                        $verification->getOriginalCode(),
+                        $verification->token
                     )
                 );
 

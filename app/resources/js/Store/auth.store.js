@@ -30,7 +30,11 @@ export default {
         ...store.actions,
         logout({ commit, state }) {
             return new Promise((resolve, reject) => {
-                axios.post('/auth/logout').then(resolve).catch(reject);
+                axios.post('/auth/logout').then(() => {
+                    commit('user', null);
+                    commit('token', null);
+                    resolve();
+                }).catch(reject);
             });
 
         }

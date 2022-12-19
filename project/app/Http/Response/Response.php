@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Http\Response;
-
-use App\Models\Scopes\VerifiedScope;
+;
 use App\Models\User;
 
 class Response
@@ -34,9 +33,7 @@ class Response
         $user = $user ?? $this->auth()->user();
         return [
             'auth/user' => $user->load([
-                'verification' => static function ($query) {
-                    $query->withoutGlobalScope(new VerifiedScope());
-                }
+                'verification'
             ]),
             'auth/token' => $this->auth()->setTTl(config('jwt.long_term_ttl'))->login($user),
         ];

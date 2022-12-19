@@ -75,7 +75,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public static function getConnectionKey(): string
     {
-        return Auth::guard('api')->check() ? Auth::guard('api')->id() . '_connection' : 'test';
+        return app()->runningUnitTests() ? 'test_family' : Auth::id() . '_connection';
     }
 
     /**

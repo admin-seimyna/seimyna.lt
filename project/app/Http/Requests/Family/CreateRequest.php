@@ -4,6 +4,8 @@ namespace App\Http\Requests\Family;
 
 use App\Enum\GenderEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class CreateRequest extends FormRequest
@@ -40,7 +42,7 @@ class CreateRequest extends FormRequest
     {
         return array_merge($this->firstStepRules(), [
             'members' => 'required|array|min:1',
-            'members.0.user_id' => 'required|in:' . Auth::guard('api')->id(),
+            'members.0.user_id' => 'required|in:' . Auth::id(),
             'members.*.name' => 'required',
             'members.*.gender' => 'required|in:' . GenderEnum::values()->join(','),
             'members.*.invite' => 'numeric|boolean',
@@ -50,6 +52,74 @@ class CreateRequest extends FormRequest
             'members.*.children' => 'array',
             'members.*.children.*' => 'numeric',
         ]);
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getMembers(): Collection
+    {
+        return collect($this->input('members'))->map(static function (&$member, $id) {
+            $member['id'] = $id;
+            return $member;
+        });
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getMembersTree(): Collection
+    {
+        return $this->getMembers()->map(function ($member) {
+            return $this->mapMember($member);
+        });
+    }
+
+    /**
+     * @param array $current
+     * @return array
+     */
+    private function mapMember(array $current): array
+    {
+        return [
+            'id' => $current['id'],
+            'name' => $current['name'],
+            'children' => $this->getChildren($current['id'])->map(static function ($member) {
+                return [
+                    'id' => $member['id'],
+                    'name' => $member['name']
+                ];
+            }),
+            'related' => $this->getRelated($current['id'])->map(function ($member) use ($current) {
+                return [
+                    'id' => $member['id'],
+                    'name' => $member['name'],
+                    'relationship' => $member['related'][$current['id']]
+                ];
+            })
+        ];
+    }
+
+    /**
+     * @param int $id
+     * @return Collection
+     */
+    private function getChildren(int $id): Collection
+    {
+        return $this->getMembers()->filter(static function ($member) use ($id) {
+            return in_array($id, $member['parents']);
+        });
+    }
+
+    /**
+     * @param int $id
+     * @return Collection
+     */
+    private function getRelated(int $id): Collection
+    {
+        return $this->getMembers()->filter(static function ($member) use ($id) {
+            return in_array($id, array_keys($member['related']));
+        });
     }
 
 

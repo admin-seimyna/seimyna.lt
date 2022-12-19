@@ -1,0 +1,49 @@
+.family-tree {
+
+  &__member {
+    @apply flex z-20;
+
+    &:before {
+      @apply bg-white absolute top-1/2 left-1/2 w-0 h-0 rounded-full;
+      content: '';
+      transform: translate(-50%, -50%);
+      transition: width .25s, height .25s, box-shadow .35s .15s;
+      box-shadow: 0 0 0 0 rgba(255,255,255, 0.3);
+    }
+
+    .avatar {
+      @apply flex w-10 h-10;
+      transition: width .25s, height .25s;
+    }
+
+    &--active {
+      @apply w-14 h-14 z-30;
+
+      &:before {
+        @apply w-52 h-52;
+        box-shadow: 0 0 0 30px rgba(255,255,255, 0.3);
+      }
+
+      .avatar {
+        @apply w-14 h-14 -mt-2 -ml-2;
+      }
+    }
+
+    .family-tree__button {
+      @apply absolute;
+
+      &.family-tree__button--remove {
+        @apply -left-14;
+      }
+
+      &.family-tree__button--add {
+        @apply left-14;
+      }
+    }
+
+    .avatar,
+    .family-tree__button {
+      @apply z-20;
+    }
+  }
+}

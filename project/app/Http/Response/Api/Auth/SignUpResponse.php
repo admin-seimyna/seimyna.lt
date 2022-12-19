@@ -4,6 +4,7 @@ namespace App\Http\Response\Api\Auth;
 
 use App\Enum\VerificationTypesEnum;
 use App\Events\NewUserRegistered;
+use App\Http\Requests\Api\Auth\SignUpRequest;
 use App\Http\Response\ApiResponse;
 use App\Http\Response\Response;
 use App\Models\User;
@@ -21,11 +22,11 @@ class SignUpResponse extends Response
     protected User $user;
 
     /**
-     * @param ApiResponse $response
+     * @param SignUpRequest $request
      */
-    public function __construct(ApiResponse $response)
+    public function __construct(SignUpRequest $request)
     {
-        $this->user = User::create($response->request->getData());
+        $this->user = User::create($request->getData());
         $verification = $this->user->verification()->create(['type' => VerificationTypesEnum::EMAIL]);
         event(new NewUserRegistered($this->user, $verification));
     }

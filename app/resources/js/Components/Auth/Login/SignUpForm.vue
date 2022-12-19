@@ -64,7 +64,7 @@ import VInput from '@/Elements/Input';
 import VButton from '@/Elements/Button';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import VPage from '@/Elements/Page';
+import VPage from '@/Components/Layout/Page';
 
 export default {
     name: 'SignUpForm',

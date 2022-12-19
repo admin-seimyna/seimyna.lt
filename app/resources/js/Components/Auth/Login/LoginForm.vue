@@ -76,7 +76,7 @@ import VButton from '@/Elements/Button';
 import SocialLogin from '@/Components/Auth/Login/SocialLogin';
 import Logo from '@/Elements/Logo';
 import {useRouter} from 'vue-router';
-import VPage from '@/Elements/Page';
+import VPage from '@/Components/Layout/Page';
 
 export default {
     name: 'LoginForm',

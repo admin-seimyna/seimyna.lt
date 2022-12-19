@@ -13,45 +13,36 @@ class LoginTest extends TestCase
 
     public function testCanLogin()
     {
-        $user = User::factory()->create([
-            'password' => 'test',
-        ]);
-
+        $user = $this->createUser();
         $this->post(route('api.auth.login'), [
             'email' => $user->email,
             'password' => 'test'
         ])->assertStatus(200);
 
-        $this->assertEquals($user->id, Auth::guard('api')->id());
+        $this->assertEquals($user->id, Auth::id());
     }
 
     public function testCanNotLoginWithWrongPassword()
     {
-        $user = User::factory()->create([
-            'password' => 'test',
-        ]);
+        $user = $this->createUser();
 
         $this->post(route('api.auth.login'), [
             'email' => $user->email,
             'password' => 'test2'
         ])->assertStatus(302);
 
-        $this->assertEmpty(Auth::guard('api')->id());
+        $this->assertEmpty(Auth::id());
     }
 
     public function testUserCanLogout()
     {
-        $user = User::factory()->create([
-            'password' => 'test',
-        ]);
-
-        Auth::guard('api')->login($user);
-        $this->post(route('api.auth.logout'))
+        $this->actingAsUser()
+            ->post(route('api.auth.logout'))
             ->assertStatus(200)
             ->assertJsonStructure([
                 'auth/user',
                 'auth/token'
             ]);
-        $this->assertEmpty(Auth::guard('api')->id());
+        $this->assertEmpty(Auth::id());
     }
 }

@@ -1,34 +1,20 @@
 <template>
     <div class="family-tree w-full h-full flex flex-col items-center justify-center">
-        <div v-for="(layer, layerIndex) in family"
+        <div v-for="(layer, layerIndex) in tree"
              :key="`layer-${layerIndex}`"
-             :class="{
-                 'z-10': currentLayer === layerIndex,
-                 'opacity-30': currentMember !== null && currentLayer !== layerIndex
-             }"
-             class="w-full flex items-center justify-center"
+             class="family-tree__layer flex items-center w-full justify-center"
         >
-            <template v-if="!layer.length">
-                <FamilyTreeButton
-                    inline
-                    @click="addMember(layerIndex)"
+            <div v-for="(members, memberLayerIndex) in layer"
+                 :key="`member-layer-${memberLayerIndex}`"
+                 class="flex items-center w-full justify-center"
+            >
+                <avatar v-for="(member, memberIndex) in members"
+                        :key="`member-${memberIndex}`"
+                        :subject="member"
+                        class="w-10 h-10"
+                        @click="addParents(layerIndex, memberLayerIndex, memberIndex)"
                 />
-            </template>
-            <template v-else>
-                <FamilyTreeMember
-                    v-for="(member, memberIndex) in layer"
-                    :key="`member-${memberIndex}`"
-                    :member="member"
-                    :active="layerIndex === currentLayer && currentMember === memberIndex"
-                    @add="addMember(currentLayer)"
-                    @remove="removeMember(currentLayer, currentMember)"
-                    @select="selectMember(memberIndex, layerIndex)"
-                />
-                <FamilyTreeButton
-                    inline
-                    @click="addMember(layerIndex)"
-                />
-            </template>
+            </div>
         </div>
     </div>
 </template>
@@ -42,79 +28,37 @@ export default {
     name: 'FamilyTree',
     components: {FamilyTreeMember, FamilyTreeButton, Avatar},
     setup(props) {
-        let family = reactive([
-            [],
+        let tree = reactive([
             [
-                {
-                    name: 'Ignas',
-                }
+                [
+                    {
+                        name: 'Ignas',
+                    }
+                ]
             ],
-            [],
         ]);
 
-        const currentLayer = ref(null);
-        const currentMember = ref(null);
-
-        function blur() {
-            currentMember.value = null;
-        }
-
-        function addParentsLayer() {
-            family.unshift([]);
-            blur();
-        }
-
-        function addChildrenLayer() {
-            family.push([]);
-            blur();
-        }
+        const currentLayer = ref(1);
+        const currentMember = ref(0);
 
         return {
-            family,
+            tree,
             currentLayer,
             currentMember,
-            addParentsLayer,
-            addChildrenLayer,
-            selectMember(index, layerIndex) {
-                if (currentMember.value === index) {
-                    currentMember.value = null;
-                    return;
-                }
-                currentMember.value = index;
-                currentLayer.value = layerIndex;
-            },
-
-
-            removeLayer(index) {
-                family.splice(index, 1);
-            },
-            addMember(layerIndex) {
-                if (typeof layerIndex === 'undefined' || layerIndex === null) {
-                    layerIndex = 0;
+            addParents(layerIndex, memberLayerIndex, memberIndex) {
+                const member = { name: 'test'};
+                let index = layerIndex - 1;
+                if (!Array.isArray(tree[index])) {
+                    tree.unshift([]);
+                    index++;
                 }
 
-                family[layerIndex].push({
-                    name: 'Test',
-                });
-
-                if (!layerIndex) {
-                    addParentsLayer();
+                for(let x = tree[index].length; x < memberIndex; x++) {
+                    tree[index].push([]);
                 }
 
-                const length = family.length - 1;
-                if (layerIndex === length) {
-                    addChildrenLayer();
-                }
-
-                blur();
-            },
-            removeMember(layerIndex, memberIndex) {
-                family[layerIndex].splice(memberIndex, 1);
-                if (!family[layerIndex].length) {
-                    family.splice(layerIndex, 1);
-                }
-                blur();
-            },
+                tree[index][memberIndex].push(member);
+            }
         }
     }
 }

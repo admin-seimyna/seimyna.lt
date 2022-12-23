@@ -20,7 +20,7 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function() {
 });
 
 
-Route::group(['middl|eware' => 'auth:api'], function() {
+Route::group(['middleware' => 'auth:api'], function() {
 
     // Logout
     Route::group(['prefix' => 'auth', 'as' => 'auth.'], function() {

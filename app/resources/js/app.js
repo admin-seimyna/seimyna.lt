@@ -11,7 +11,7 @@ createApp(App)
         name: 'app',
         config,
         http: {
-            host: 'http://192.168.68.107/api',
+            host: 'http://192.168.68.110/api',
         },
         splashscreen: {
             delay: 300

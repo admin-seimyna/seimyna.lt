@@ -29,9 +29,9 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     // Verifications
     Route::group(['prefix' => 'verify', 'as' => 'verify.'], function() {
-        Route::get('{not_verified_verification:token}', [\App\Http\Controllers\Api\VerificationController::class, 'get'])->name('get');
-        Route::post('{type}/{not_verified_verification:token}', [\App\Http\Controllers\Api\VerificationController::class, 'post'])->name('post');
-        Route::post('{type}/{not_verified_verification:token}/resend', [\App\Http\Controllers\Api\VerificationController::class, 'resend'])->name('resend');
+        Route::get('{unverified:token}', [\App\Http\Controllers\Api\VerificationController::class, 'get'])->name('get');
+        Route::post('{type}/{unverified:token}', [\App\Http\Controllers\Api\VerificationController::class, 'post'])->name('post');
+        Route::post('{type}/{unverified:token}/resend', [\App\Http\Controllers\Api\VerificationController::class, 'resend'])->name('resend');
     });
 
     // Family

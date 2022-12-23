@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full h-full flex flex-col"
+    <div class="w-full h-full flex flex-col bg-gray-100"
          :class="{
             'bubble-top-right': bubbleTopRight,
             'bubble-bottom-right': bubbleBottomRight,

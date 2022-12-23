@@ -17,7 +17,7 @@ class AuthController extends Controller
     {
         return ApiResponse::create()
             ->handle(function(ApiResponse $response) {
-                Auth::guard('api')->logout();
+                Auth::logout();
                 return ['auth/user' => null, 'auth/token' => null];
             })->json();
     }

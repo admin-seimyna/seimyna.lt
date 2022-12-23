@@ -13,13 +13,27 @@ class CreateMemberRelationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('family_member_relations', function (Blueprint $table) {
-            $table->unsignedBigInteger('member_id');
-            $table->unsignedBigInteger('related_to');
-            $table->enum('status', \App\Enum\MemberRelationEnum::values()->toArray());
+        Schema::create('member_relations', function (Blueprint $table) {
+            $table->unsignedBigInteger('child_id')->nullable()->index();
+            $table->unsignedBigInteger('parent_id')->nullable()->index();
+            $table->unsignedBigInteger('member_id')->nullable()->index();
+            $table->unsignedBigInteger('related_to')->nullable()->index();
+            $table->enum('status', \App\Enum\MemberRelationEnum::values()->toArray())->nullable();
             $table->timestamps();
 
-            $table->unique(['member_id', 'related_to']);
+            $table->unique(['child_id', 'parent_id', 'member_id', 'related_to', 'status'], 'relation');
+            $table->foreign('child_id')
+                ->references('id')
+                ->on('members')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+
+            $table->foreign('parent_id')
+                ->references('id')
+                ->on('members')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+
             $table->foreign('member_id')
                 ->references('id')
                 ->on('members')

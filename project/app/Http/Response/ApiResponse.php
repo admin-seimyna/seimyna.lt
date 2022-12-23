@@ -67,7 +67,7 @@ class ApiResponse
      */
     public function handle($callback): self
     {
-        $data = is_string($callback) ? (new $callback($this))->get() : $callback($this);
+        $data = is_string($callback) ? (new $callback($this->request))->get() : $callback($this);
         if (!is_array($data) && method_exists($data, 'toArray')) {
             $data = $data->toArray();
         }

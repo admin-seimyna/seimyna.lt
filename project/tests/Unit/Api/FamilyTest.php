@@ -3,6 +3,7 @@
 namespace Api;
 
 use App\Enum\GenderEnum;
+use App\Enum\MemberRelationEnum;
 use App\Enum\VerificationTypesEnum;
 use App\Models\Family\Member;
 use App\Models\Family\MemberInvitation;
@@ -17,64 +18,79 @@ class FamilyTest extends TestCase
 
     public function testCanCreate()
     {
-        $user = User::factory()->create();
-        $user->verification()->create(['type' => VerificationTypesEnum::EMAIL])->verify();
-        Auth::guard('api')->login($user);
+        $this->login();
 
         $members = [
             0 => [
                 'name' => 'Father',
                 'gender' => GenderEnum::MALE,
-                'user_id' => 1,
-                'children' => [2,3],
+                'user_id' => Auth::id(),
                 'parents' => [4,5],
+                'related' => [
+                    1 => MemberRelationEnum::SPOUSE
+                ]
             ],
             1 => [
                 'name' => 'Mother',
                 'gender' => GenderEnum::FEMALE,
                 'invite' => 1,
                 'email' => 'mother@test.io',
-                'children' => [0],
-                'parents' => [],
+                'parents' => [6],
+                'related' => [
+                    0 => MemberRelationEnum::SPOUSE
+                ]
             ],
             2 => [
                 'name' => 'Son',
                 'gender' => GenderEnum::MALE,
-                'children' => [],
-                'parents' => [0, 1]
+                'parents' => [0, 1],
+                'related' => [],
             ],
             3 => [
                 'name' => 'Daughter',
                 'gender' => GenderEnum::FEMALE,
-                'children' => [],
                 'parents' => [0, 1],
+                'related' => [],
             ],
             4 => [
                 'name' => 'Grandmother',
                 'gender' => GenderEnum::FEMALE,
                 'invite' => 1,
                 'email' => 'grandmother@test.io',
-                'children' => [0],
                 'parents' => [],
+                'related' => [
+                    5 => MemberRelationEnum::SPOUSE,
+                ],
             ],
             5 => [
                 'name' => 'Grandfather',
                 'gender' => GenderEnum::MALE,
                 'invite' => 1,
                 'email' => 'grandfather@test.io',
-                'children' => [0],
                 'parents' => [],
+                'related' => [
+                    4 => MemberRelationEnum::SPOUSE,
+                ],
             ],
             6 => [
                 'name' => 'Grandfather 2',
                 'gender' => GenderEnum::MALE,
                 'invite' => 1,
                 'email' => 'grandfather2@test.io',
-                'children' => [1],
                 'parents' => [],
-            ]
+                'related' => [],
+            ],
+            7 => [
+                'name' => 'Father brother',
+                'gender' => GenderEnum::MALE,
+                'parents' => [4,5],
+                'related' => [
+                    0 => MemberRelationEnum::BROTHERS
+                ]
+            ],
         ];
-        $this->post(route('api.family.create'), [
+        $this->actingAsUser()
+            ->post(route('api.family.create'), [
             'step' => 2,
             'name' => 'Test',
             'members' => $members

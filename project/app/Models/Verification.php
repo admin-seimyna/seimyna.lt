@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\VerifiedScope;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -41,16 +41,6 @@ class Verification extends Model
     ];
 
     /**
-     * The "booted" method of the model.
-     *
-     * @return void
-     */
-    protected static function booted()
-    {
-        static::addGlobalScope(new VerifiedScope());
-    }
-
-    /**
      * @var int|null
      */
     private ?int $originalCode = null;
@@ -61,6 +51,15 @@ class Verification extends Model
     public function module(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    /**
+     * @param Builder $builder
+     * @return Builder
+     */
+    public function scopeUnverified(Builder $builder): Builder
+    {
+        return $builder->whereNull('verified_at');
     }
 
     /**

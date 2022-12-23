@@ -9,16 +9,16 @@ use App\Http\Response\Response;
 class LoginResponse extends Response
 {
     /**
-     * @var LoginRequest|\Illuminate\Foundation\Http\FormRequest|\Illuminate\Http\Request
+     * @var LoginRequest
      */
     protected LoginRequest $request;
 
     /**
-     * @param ApiResponse $response
+     * @param LoginRequest $request
      */
-    public function __construct(ApiResponse $response)
+    public function __construct(LoginRequest $request)
     {
-        $this->request = $response->request;
+        $this->request = $request;
     }
 
     /**

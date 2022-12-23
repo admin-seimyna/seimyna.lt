@@ -44,7 +44,7 @@
 import VForm from '@/Elements/Form';
 import VInput from '@/Elements/Input';
 import VButton from '@/Elements/Button';
-import VPage from '@/Elements/Page';
+import VPage from '@/Components/Layout/Page';
 export default {
     name: 'ResetPasswordForm',
     components: {VPage, VButton, VInput, VForm},

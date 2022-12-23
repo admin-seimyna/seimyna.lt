@@ -17,7 +17,7 @@ class PostRequest extends FormRequest
         $length = config('auth.verification.code_length');
         return [
             'code' => 'required|array|min:' . $length . '|max:' . $length,
-            'code.*' => 'numeric|min:1|max:9'
+            'code.*' => 'numeric|min:0|max:9'
         ];
     }
 

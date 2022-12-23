@@ -22,7 +22,9 @@ class VerificationController extends Controller
      */
     public function get(Verification $verification): JsonResponse
     {
-        return ApiResponse::create()->handle(function() use ($verification) {
+        return ApiResponse::create()
+            ->authorize('access', [$verification, $verification->type])
+            ->handle(function() use ($verification) {
             return $verification;
         })->json();
     }

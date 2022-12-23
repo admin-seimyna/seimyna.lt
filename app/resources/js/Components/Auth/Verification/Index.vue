@@ -91,7 +91,7 @@ import VSpinner from '@/Elements/Spinner';
 import axios from 'axios';
 import {useStore} from 'vuex';
 import {useI18n} from 'vue-i18n';
-import VPage from '@/Elements/Page';
+import VPage from '@/Components/Layout/Page';
 
 export default {
     name: 'Verification',

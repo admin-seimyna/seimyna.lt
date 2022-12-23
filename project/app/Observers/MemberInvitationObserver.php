@@ -14,7 +14,7 @@ class MemberInvitationObserver
     public function creating(MemberInvitation $invitation): void
     {
         $invitation->token = uniqid().time();
-        $invitation->invited_by = Auth::guard('api')->user()->member->id;
+        $invitation->invited_by = Auth::user()->member->id;
         $invitation->expires_in = Carbon::now()->addDay();
     }
 }

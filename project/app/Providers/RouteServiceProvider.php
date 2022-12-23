@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Models\Scopes\VerifiedScope;
 use App\Models\Verification;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -37,8 +36,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Route::bind('not_verified_verification', function(string $token) {
-            return Verification::withoutGlobalScope(new VerifiedScope())->where('token', $token)->firstOrFail();
+        Route::bind('unverified', function(string $token) {
+            return Verification::unverified()->where('token', $token)->firstOrFail();
         });
 
         $this->configureRateLimiting();

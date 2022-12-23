@@ -36,7 +36,7 @@ class Family extends Model
      */
     public function connect()
     {
-        if (!Auth::guard('api')->check()) {
+        if (!Auth::check()) {
             return;
         }
 
@@ -81,6 +81,6 @@ class Family extends Model
      */
     public function member(): HasOne
     {
-        return $this->hasOne(Member::class);
+        return $this->setConnection(DB::getDefaultConnection())->hasOne(Member::class);
     }
 }

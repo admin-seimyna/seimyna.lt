@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full flex items-center justify-between bg-white shadow py-2 px-10 absolute bottom-0 left-0 z-10">
+    <div class="w-full flex items-center justify-between h-16 bg-white shadow px-10 absolute bottom-0 left-0 z-10">
         <router-link
             :to="{ name: 'dashboard'}"
             class="flex items-center justify-center w-12 h-12 rounded-full"
@@ -21,15 +21,18 @@
 </template>
 <script>
 import Avatar from '@/Elements/Avatar';
-import {computed} from 'vue';
+import {computed, inject} from 'vue';
 import {useStore} from 'vuex';
 import {useRouter} from 'vue-router';
+import FamilyCreate from '@/Components/Family/Create/Index';
+
 export default {
     name: 'Navigation',
     components: {
         Avatar
     },
     setup(props) {
+        const app = inject('app');
         const store = useStore();
         const router = useRouter();
 
@@ -39,7 +42,12 @@ export default {
             }),
 
             createFamily() {
-                router.push({ name: 'family.create' });
+                app.modal({
+                    component: FamilyCreate,
+                    options: {
+                        disableBackButton: true
+                    }
+                });
             }
         }
     }

@@ -1,21 +1,23 @@
 <template>
     <teleport to="body">
-        <transition v-for="(component, index) in components"
-                    :key="`${component.id}-${index}`"
+        <transition v-for="(modal, index) in modals"
+                    :key="`${modal.id}-${index}`"
                     appear
                     name="modal"
         >
-            <div v-if="component.active"
+            <div v-if="modal.active"
+                 ref="modalRef"
                  class="modal"
-                 :class="[component.zIndex,`modal--${component.type}`]"
+                 :class="[modal.zIndex,`modal--${modal.options.type}`]"
                  :style="{
                      'transition-duration': transitionDuration
                  }"
+                 @click="closeOnOutside($event, index)"
             >
                 <div class="modal-content">
-                    <component :is="component.component"
+                    <component :is="modal.component"
                                ref="componentRef"
-                               v-bind="component.props"
+                               v-bind="modal.props"
                                @close="close(index)"
                     />
                 </div>
@@ -36,41 +38,53 @@ export default {
     },
     setup(props) {
         const app = inject('app');
-        const components = reactive([]);
+        const modals = reactive([]);
         const componentRef = ref(null);
+        const modalRef = ref(null);
 
-        function open(component) {
+        function open(modal) {
             return new Promise((resolve, reject) => {
                 const id = Math.random().toString(16).slice(2);
-                component.id = id;
-                component.zIndex = 1000 + components.length;
-                component.active = true;
-                component.type = component.type || 'vertical';
-                components.push(component);
+                modal.id = id;
+                modal.zIndex = 1000 + modals.length;
+                modal.active = true;
+                modal.options = Object.assign({
+                    type: 'vertical',
+                    disableBackButton: false
+                },modal.options || {})
+                modals.push(modal);
 
-                app.back.on(`modal-${id}`, () => {
-                    close(components.length - 1);
-                });
+                if (modal.options.disableBackButton) {
+                    app.back.disable();
+                } else {
+                    app.back.on(`modal-${id}`, () => {
+                        close(modals.length - 1);
+                    });
+                }
 
                 setTimeout(() => {
-                    const index = components.findIndex(component => component.id === id);
+                    const index = modals.findIndex(component => component.id === id);
                     resolve(componentRef.value[index]);
                 }, props.transition);
             });
         }
 
         function close(index) {
-            const component = components[index];
-            if (!component) {
+            const modal = modals[index];
+            if (!modal) {
                 return;
             }
-            component.active = false;
-            app.back.off(`modal-${component.id}`);
+            modal.active = false;
+            if (modal.options.disableBackButton) {
+                app.back.enable();
+            } else {
+                app.back.off(`modal-${modal.id}`);
+            }
             setTimeout(() => {
-                if (typeof component.onClose === 'function') {
-                    component.onClose();
+                if (typeof modal.onClose === 'function') {
+                    modal.onClose();
                 }
-                components.splice(index, 1);
+                modals.splice(index, 1);
             }, props.transition);
         }
 
@@ -80,11 +94,18 @@ export default {
 
         return {
             componentRef,
-            components,
+            modalRef,
+            modals,
             close,
             transitionDuration: computed(() => {
                 return `${props.transition / 1000}s`;
-            })
+            }),
+
+            closeOnOutside(e, index) {
+                if (modals[index].options.type === 'popup' && modalRef.value[index] === e.target) {
+                    close(index);
+                }
+            }
         }
     }
 }

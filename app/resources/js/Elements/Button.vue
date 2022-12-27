@@ -7,6 +7,7 @@
                  'button--rounded': rounded,
                  'button--primary': primary,
                  'button--warning': warning,
+                 'button--danger': danger,
                  'button--shadow': shadow,
                  'button--basic': basic,
                  'button--bordered': bordered,
@@ -15,9 +16,12 @@
                }"
     >
         <VSpinner v-if="progress"
-                  class="button__spinner mr-2"
+                  class="button__spinner"
+                  :class="{
+                    'mr-2': !rounded
+                  }"
         />
-        <slot />
+        <slot v-if="!rounded || (rounded && !progress)" />
     </component>
 </template>
 <script>
@@ -33,6 +37,7 @@ export default {
         progress: Boolean,
         disabled: Boolean,
         primary: Boolean,
+        danger: Boolean,
         warning: Boolean,
         shadow: Boolean,
         basic: Boolean,

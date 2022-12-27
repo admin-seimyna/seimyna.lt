@@ -1,6 +1,7 @@
 .modal {
   @apply w-full h-full fixed top-0 left-0;
 
+
   &--horizontal {
     transition: left .25s, opacity .3s;
     box-shadow: -20px 0px 20px 12px rgb(0 0 0 / 12%);
@@ -30,5 +31,25 @@
 
   &-content {
     @apply w-full h-full flex flex-col bg-white;
+  }
+
+  &--popup {
+    background-color: rgba(0,0,0,.2);
+
+    .modal-content {
+      @apply absolute bottom-0 left-0 w-full max-h-full h-auto;
+      transition: bottom .25s, opacity .3s;
+    }
+
+    &.modal-enter-from,
+    &.modal-leave-to {
+      .modal-content {
+        @apply -bottom-1/2 opacity-0;
+      }
+    }
+
+    &.modal-enter-to {
+      @apply -bottom-1/2;
+    }
   }
 }

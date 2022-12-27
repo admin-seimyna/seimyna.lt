@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col overflow-y-auto w-full h-full overflow-hidden">
+    <div class="flex flex-col w-full h-full overflow-hidden">
         <transition
             appear
             name="splash"

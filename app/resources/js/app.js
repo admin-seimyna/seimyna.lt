@@ -3,6 +3,7 @@ import App from './Components/App';
 import Seimyna from './seimyna';
 import routes from './routes';
 import config from './config.json';
+import constants from './constants.json';
 import translations from './i18n.json';
 
 createApp(App)
@@ -10,9 +11,12 @@ createApp(App)
         routes,
         name: 'app',
         config,
+        constants,
         http: {
-            // host: 'http://192.168.68.107/api', home
-            host: 'http://192.168.68.110/api',
+            // home
+            host: 'http://192.168.68.108/api',
+            // work
+            // host: 'http://192.168.68.110/api',
         },
         splashscreen: {
             delay: 300

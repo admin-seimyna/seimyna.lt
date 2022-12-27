@@ -18,7 +18,8 @@
                 >
                     <slot name="prepend" />
                 </div>
-                <input :name="name"
+                <input v-model="inputValue"
+                       :name="name"
                        :type="type"
                        :placeholder="placeholder"
                        @focus="onFocus"
@@ -40,44 +41,41 @@
     </div>
 </template>
 <script>
-import {computed, ref} from 'vue';
-import { useI18n } from 'vue-i18n';
+import {computed, ref, watch} from 'vue';
 import InputError from '@/Elements/InputError';
+import { fieldProps, useField } from '@/Elements/Field';
 
 export default {
     name: 'VInput',
     components: {InputError},
     props: {
-        title: String,
+        ...fieldProps,
+        modelValue: [String, Number],
+
         type: {
             type: String,
             default: 'text',
         },
-        name: String,
-        error: String,
-        errors: Object,
     },
     setup(props, { slots, emit }) {
         const focused = ref(false);
-        const { t } = useI18n();
-        const errorMessage = computed(() => {
-            if (!props.error && !props.errors) return null;
-            if (props.error) return props.error;
-            return props.errors[props.name];
-        });
-        const label = computed(() => {
-            return props.title || t(`field.title.${props.name}`);
-        });
+        const inputValue = ref(props.modelValue);
+
+        watch(
+            () => inputValue.value,
+            (value) => {
+                    emit('update:modelValue', value);
+                }
+        );
+
+        watch(
+            () => props.modelValue,
+            (value) => inputValue.value = value,
+        );
 
         return {
-            label,
-            errorMessage,
-            hasError: computed(() => {
-                return !!errorMessage.value;
-            }),
-            placeholder: computed(() => {
-                return `${props.placeholder || t('field.placeholder.insert')}...`;
-            }),
+            ...useField(props),
+            inputValue,
             focused,
             hasAppendSlot: computed(() => {
                 return !!slots.append

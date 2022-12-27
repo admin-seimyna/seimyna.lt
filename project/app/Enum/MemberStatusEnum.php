@@ -2,6 +2,8 @@
 
 namespace App\Enum;
 
+use Illuminate\Support\Collection;
+
 class MemberStatusEnum extends Enum
 {
     const FATHER = 'father';

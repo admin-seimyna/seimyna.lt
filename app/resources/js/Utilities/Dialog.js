@@ -39,7 +39,7 @@ export default class Dialog {
     }
 
     /**
-     * Propt
+     * Prompt
      * @param title
      * @param message
      * @param okButtonText
@@ -52,8 +52,46 @@ export default class Dialog {
                 message,
                 resolve,
                 title,
-                [okButtonText, cancelButtonText]
+                [cancelButtonText, okButtonText]
             );
+        });
+    }
+
+    /**
+     * Confirm
+     * @param title
+     * @param message
+     * @param okButtonText
+     * @param cancelButtonText
+     * @return {Promise<unknown>}
+     */
+    confirm(title, message, okButtonText, cancelButtonText) {
+        return new Promise((resolve, reject) => {
+            navigator.notification.confirm(
+                message,
+                resolve,
+                title,
+                [cancelButtonText, okButtonText]
+            );
+        });
+    }
+
+    /**
+     * Default app confirmation
+     * @param title
+     * @param message
+     * @return {Promise<unknown>}
+     */
+    defaultConfirm(title, message) {
+        return new Promise((resolve, reject) => {
+            this.confirm(
+                title,
+                message,
+                this.t('common.button.yes'),
+                this.t('common.button.no')
+            ).then((result) => {
+                result === 2 ? resolve() : reject();
+            });
         });
     }
 

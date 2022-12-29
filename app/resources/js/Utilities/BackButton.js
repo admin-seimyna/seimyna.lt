@@ -1,6 +1,7 @@
 export default class BackButton {
     events = []; // events list
     emitter; // function witch emits on backbutton event
+    disabled = false;
 
     /**
      * Constructor
@@ -14,6 +15,7 @@ export default class BackButton {
      * @private
      */
     _emit() {
+        if (this.disabled) return;
         const evt = this.events[this.events.length - 1];
         evt.callback();
         this.off(evt.key);
@@ -44,5 +46,21 @@ export default class BackButton {
         if (!this.events.length) {
             document.removeEventListener('backbutton', this.emitter);
         }
+    }
+
+    /**
+     * Disable back button
+     */
+    disable() {
+        this.disabled = true;
+        document.removeEventListener('backbutton', this.emitter);
+    }
+
+    /**
+     * Enable back button
+     */
+    enable() {
+        this.disabled = false;
+        document.addEventListener('backbutton', this.emitter);
     }
 }

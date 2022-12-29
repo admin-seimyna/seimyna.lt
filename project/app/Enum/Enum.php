@@ -39,6 +39,15 @@ class Enum
     }
 
     /**
+     * @param Collection $values
+     * @return Collection
+     */
+    public static function export(Collection $values): Collection
+    {
+        return $values;
+    }
+
+    /**
      * @return Collection
      */
     private static function collect(): Collection

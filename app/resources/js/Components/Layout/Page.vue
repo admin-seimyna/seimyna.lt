@@ -20,6 +20,7 @@ export default {
         bubbleCenter: Boolean,
         bubbleCenterRight: Boolean,
         bubbleTopCenter: Boolean,
+        public: Boolean,
     }
 }
 </script>

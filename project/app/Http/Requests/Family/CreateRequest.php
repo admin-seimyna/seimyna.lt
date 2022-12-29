@@ -20,8 +20,26 @@ class CreateRequest extends FormRequest
         $step = $this->input('step', 1);
         switch ($step) {
             case 2: return $this->secondStepRules();
+            case 3: return $this->thirdStepRules();
+            case 4: return $this->fifthStepRules();
             default: return $this->firstStepRules();
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function completed(): bool
+    {
+        return $this->input('step', 1) === 2;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNextStep(): int
+    {
+        return $this->input('step', 1) + 1;
     }
 
     /**
@@ -30,7 +48,7 @@ class CreateRequest extends FormRequest
     private function firstStepRules(): array
     {
         return [
-            'step' => 'required|numeric|min:1|max:2',
+            'step' => 'required|numeric|min:1|max:3',
             'name' => 'required',
         ];
     }
@@ -45,12 +63,30 @@ class CreateRequest extends FormRequest
             'members.0.user_id' => 'required|in:' . Auth::id(),
             'members.*.name' => 'required',
             'members.*.gender' => 'required|in:' . GenderEnum::values()->join(','),
-            'members.*.invite' => 'numeric|boolean',
-            'members.*.email' => 'required_if:members.*.invite,1|email',
+        ]);
+    }
+
+    /**
+     * @return array
+     */
+    private function thirdStepRules(): array
+    {
+        return array_merge($this->secondStepRules(), [
             'members.*.parents' => 'array',
             'members.*.parents.*' => 'numeric',
             'members.*.children' => 'array',
             'members.*.children.*' => 'numeric',
+        ]);
+    }
+
+    /**
+     * @return array
+     */
+    private function fifthStepRules(): array
+    {
+        return array_merge($this->thirdStepRules(), [
+            'members.*.invite' => 'numeric|boolean',
+            'members.*.email' => 'required_if:members.*.invite,1|email',
         ]);
     }
 

@@ -41,6 +41,11 @@ return [
             'root' => base_path('resources/lang'),
         ],
 
+        'enum' => [
+            'driver' => 'local',
+            'root' => base_path('app/Enum'),
+        ],
+
         'app-resources' => [
             'driver' => 'local',
             'root' => base_path('../app/resources'),

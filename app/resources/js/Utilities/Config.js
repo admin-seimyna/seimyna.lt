@@ -1,3 +1,5 @@
+import { get, set} from './_helpers';
+
 export default class Config {
     props; // config properties
 
@@ -16,17 +18,7 @@ export default class Config {
      * @return {*}
      */
     get(key) {
-        let value = this.props;
-        key.split('.').every((k) => {
-            if (typeof value[k] === 'undefined') {
-                value = undefined;
-                return false;
-            }
-            value = value[k];
-            return true;
-        });
-
-        return value;
+        return get(key, this.props);
     }
 
     /**
@@ -35,23 +27,6 @@ export default class Config {
      * @param value
      */
     set(key, value) {
-        const keys = key.split('.');
-        const firstKey = keys[0];
-        let configValue = this.props[firstKey];
-        keys.shift();
-        const len = keys.length - 1;
-        keys.every((k, index) => {
-            if (index === len) {
-                configValue[k] = value;
-                return false;
-            }
-            if (typeof configValue[k] === 'undefined') {
-                configValue[k] = {};
-            }
-            configValue = configValue[k];
-            return true;
-        });
-
-        this.props[firstKey] = configValue;
+        this.props = set(key, value, this.props);
     }
 }

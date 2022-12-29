@@ -151,7 +151,7 @@ export default {
             isScrolling.value = false;
             direction.value = null;
             interacting.value = false;
-            emit('change', props.slides[activeSlideIndex.value].name);
+            emit('change', props.slides[activeSlideIndex.value].name, activeSlideIndex.value);
         }
 
 
@@ -186,6 +186,16 @@ export default {
                 const index = props.slides.findIndex(slide => slide.name === name);
                 if (index === -1) return;
                 scrollTo(index);
+            },
+            next() {
+                const nextIndex = activeSlideIndex.value + 1;
+                if (nextIndex >= props.slides.length) return;
+                scrollTo(nextIndex);
+            },
+            back() {
+                const nextIndex = activeSlideIndex.value - 1;
+                if (nextIndex < 0) return;
+                scrollTo(nextIndex);
             }
         }
     }

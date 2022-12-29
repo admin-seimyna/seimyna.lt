@@ -9,6 +9,7 @@ import Notification from '@/Utilities/Notification';
 import BackButton from '@/Utilities/BackButton';
 import AppStatusBar from '@/Utilities/AppStatusBar';
 import Config from '@/Utilities/Config';
+import Constants from '@/Utilities/Constants';
 
 class Seimyna
 {
@@ -24,6 +25,7 @@ class Seimyna
     statusbar; // cordova status bar
     lang; // i18b
     config; // Application config
+    constant; // Application constants
 
     constructor(app, options) {
         this.app = app;
@@ -48,6 +50,7 @@ class Seimyna
             statusBarColor: '#ffffff',
             statusBarStyle: 'lightcontent',
             config: {},
+            constants: {},
         }, options);
 
         const store = (new Store()).getStore();
@@ -61,6 +64,7 @@ class Seimyna
         this.dialog = new Dialog(i18n.global.t);
         this.notification = new Notification();
         this.config = new Config(this.options.config);
+        this.constant = new Constants(this.options.constants, i18n.global.t);
         this.app.use((new Router(this.options.routes, store)).getRouter());
         this.app.use(store);
         this.app.use(i18n);

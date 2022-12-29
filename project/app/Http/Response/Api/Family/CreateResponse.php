@@ -23,11 +23,18 @@ class CreateResponse extends Response
      */
     private ?Family $family = null;
 
+    private CreateRequest $request;
+
     /**
      * @param CreateRequest $request
      */
     public function __construct(CreateRequest $request)
     {
+        $this->request = $request;
+        if (!$request->completed()) {
+            return;
+        }
+
         $this->createFamily($request->getFamilyData());
 
         $this->members = collect();
@@ -46,6 +53,12 @@ class CreateResponse extends Response
      */
     public function get(): array
     {
+        if (!$this->request->completed()) {
+            return [
+                'step' => $this->request->getNextStep(),
+            ];
+        }
+
         return [
             'family/current' => $this->family
         ];

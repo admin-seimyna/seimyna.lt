@@ -30,5 +30,6 @@ class BuildCommand extends Command
     {
         Artisan::call('locale:export');
         Artisan::call('config:export');
+        Artisan::call('constants:export');
     }
 }

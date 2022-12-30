@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'auth', 'as' => 'auth.'], function() {
     Route::post('signup', [\App\Http\Controllers\Api\Auth\SignupController::class, 'post'])->name('signup');
     Route::post('login', [\App\Http\Controllers\Api\Auth\LoginController::class, 'post'])->name('login');
+    Route::post('invitation/{type}/accept', [\App\Http\Controllers\Api\Auth\InvitationController::class, 'accept'])->name('invitation.accept');
 });
 
 
@@ -37,5 +38,10 @@ Route::group(['middleware' => 'auth:api'], function() {
     // Family
     Route::group(['prefix' => 'family', 'as' => 'family.'], function () {
         Route::post('create', [\App\Http\Controllers\Api\FamilyController::class, 'create'])->name('create');
+    });
+
+    // Family member
+    Route::group(['prefix' => 'member', 'as' => 'member.'], function () {
+        Route::post('create', [\App\Http\Controllers\Api\MemberController::class, 'create'])->name('create');
     });
 });

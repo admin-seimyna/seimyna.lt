@@ -2,10 +2,13 @@
 
 namespace App\Models\Family;
 
+use App\Enum\MemberInvitationTypesEnum;
+use App\Models\Invitation;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +29,7 @@ class Family extends Model
     /**
      * @return bool
      */
-    public function createConnection(): bool
+    public function createDatabase(): bool
     {
         return DB::statement('create database if not exists ' . $this->connection_name);
     }
@@ -41,6 +44,11 @@ class Family extends Model
         }
 
         Cache::forget(User::getConnectionKey());
+        Cache::forget(User::getFamilyKey());
+
+        Cache::rememberForever(User::getFamilyKey(), function () {
+            return $this->id;
+        });
         Cache::rememberForever(User::getConnectionKey(), function () {
             $defaultConnection = config('database.connections.' . DB::getDefaultConnection());
             $clientConnection = array_merge($defaultConnection, [
@@ -54,10 +62,11 @@ class Family extends Model
 
     /**
      * Migrate family
+     * @param string $connection
      */
-    public function migrate(): void
+    public function migrate(string $connection): void
     {
-        Artisan::call('migrate:fresh --database=' . User::getConnectionKey() . ' --path=database/migrations/family');
+        Artisan::call('migrate:fresh --database=' . ($connection  ?? User::getConnectionKey()) . ' --path=database/migrations/family');
     }
 
     /**
@@ -66,6 +75,36 @@ class Family extends Model
     public function disconnect(): void
     {
         Cache::forget(User::getConnectionKey());
+    }
+
+    /**
+     * @param string $identifier
+     * @param int $memberId
+     * @return Model
+     */
+    public function inviteViaEmail(string $identifier, int $memberId): Model
+    {
+        return $this->invitation()->create([
+            'type' => MemberInvitationTypesEnum::EMAIL,
+            'identifier' => $identifier,
+            'member_id' => $memberId
+        ]);
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function invitation(): HasOne
+    {
+        return $this->hasOne(Invitation::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function invitations(): HasMany
+    {
+        return $this->hasMany(Invitation::class);
     }
 
     /**

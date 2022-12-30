@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Family\CreateRequest;
+use App\Http\Requests\Api\Family\CreateRequest;
 use App\Http\Response\Api\Family\CreateResponse;
 use App\Http\Response\ApiResponse;
 use Illuminate\Http\JsonResponse;

@@ -15,17 +15,10 @@ class CreateMembersTable extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('family_id');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('name');
             $table->enum('gender', \App\Enum\GenderEnum::values()->toArray());
             $table->timestamps();
-
-            $table->foreign('family_id')
-                ->references('id')
-                ->on(env('DB_DATABASE') . '.families')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
 
             $table->foreign('user_id')
                 ->references('id')

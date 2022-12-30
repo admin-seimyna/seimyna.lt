@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -75,7 +76,15 @@ class User extends Authenticatable implements JWTSubject
      */
     public static function getConnectionKey(): string
     {
-        return app()->runningUnitTests() ? 'test_family' : Auth::id() . '_connection';
+        return app()->runningUnitTests() ? env('DB_DATABASE') : Auth::id() . '_connection';
+    }
+
+    /**
+     * @return string
+     */
+    public static function getFamilyKey(): string
+    {
+        return Auth::id() . '_family';
     }
 
     /**
@@ -84,6 +93,14 @@ class User extends Authenticatable implements JWTSubject
     public function family(): BelongsToMany
     {
         return $this->belongsToMany(Family::class, 'family_users');
+    }
+
+    /**
+     * @return Family|null
+     */
+    public function currentFamily(): ?Family
+    {
+        return $this->family()->where('id', Cache::get(static::getFamilyKey()));
     }
 
     /**

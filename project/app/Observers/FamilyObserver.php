@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Family\Family;
+use Illuminate\Support\Facades\DB;
 
 class FamilyObserver
 {
@@ -11,7 +12,28 @@ class FamilyObserver
      */
     public function creating(Family $family): void
     {
-        $connection = app()->runningUnitTests() ? 'seimyna_test_family' : mb_strtolower($family->name) . '_' . time() . uniqid();
+        $connection = app()->runningUnitTests() ? env('DB_FAMILY_DATABASE') : mb_strtolower($family->name) . '_' . time() . uniqid();
         $family->connection_name = $connection;
+        config([
+            'database.connections.migration' => array_merge(config('database.connections.main'), [
+                'database' => $family->connection_name
+            ])
+        ]);
+        $family->createDatabase();
+        $family->migrate('migration');
+
+        // destroy migration connection
+        $connections = config('database.connections');
+        unset($connections['migration']);
+        config(['database.connections' => $connections]);
+    }
+
+    /**
+     * @param Family $family
+     */
+    public function deleted(Family $family): void
+    {
+        DB::statement('drop database if exists ' . $family->connection_name);
+        $family->disconnect();
     }
 }

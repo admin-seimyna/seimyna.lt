@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMemberInvitationsTable extends Migration
+class CreateInvitationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,26 +13,27 @@ class CreateMemberInvitationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('member_invitations', function (Blueprint $table) {
+        Schema::create('invitations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('member_id');
+            $table->unsignedBigInteger('family_id');
             $table->unsignedBigInteger('invited_by');
-            $table->string('token');
+            $table->string('code');
             $table->enum('type', \App\Enum\MemberInvitationTypesEnum::values()->toArray());
             $table->string('identifier');
             $table->dateTime('expires_in');
             $table->dateTime('activated_at')->nullable();
             $table->timestamps();
 
-            $table->foreign('member_id')
+            $table->foreign('family_id')
                 ->references('id')
-                ->on('members')
+                ->on('families')
                 ->cascadeOnUpdate()
                 ->cascadeOnUpdate();
 
             $table->foreign('invited_by')
                 ->references('id')
-                ->on('members')
+                ->on('users')
                 ->cascadeOnUpdate()
                 ->cascadeOnUpdate();
         });
@@ -45,6 +46,6 @@ class CreateMemberInvitationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('family_member_invitations');
+        Schema::dropIfExists('invitations');
     }
 }

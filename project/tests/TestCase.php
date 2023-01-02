@@ -75,6 +75,16 @@ abstract class TestCase extends BaseTestCase
     /**
      * @return $this
      */
+    protected function logout(): self
+    {
+        Auth::user()->currentFamily->disconnect();
+        Auth::logout();
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
     protected function connectFamily(): self
     {
         $user = Auth::user();

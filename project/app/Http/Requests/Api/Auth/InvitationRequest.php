@@ -68,7 +68,7 @@ class InvitationRequest extends FormRequest
             $rules['identifier'][] = 'email';
         }
 
-        $rules['identifier'][] = 'exists:invitations';
+        $rules['identifier'][] = 'exists:main.invitations';
 
         return $rules;
     }

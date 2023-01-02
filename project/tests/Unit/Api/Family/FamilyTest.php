@@ -89,7 +89,7 @@ class FamilyTest extends TestCase
         $this->assertCount(0, Family::get());
 
         $this->post(route('api.family.create'), [
-            'step' => 3,
+            'step' => 4, // skip step 3
             'name' => 'Test',
             'members' => $members
         ])->assertStatus(200);

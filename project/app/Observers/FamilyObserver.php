@@ -12,7 +12,7 @@ class FamilyObserver
      */
     public function creating(Family $family): void
     {
-        $connection = app()->runningUnitTests() ? env('DB_FAMILY_DATABASE') : mb_strtolower($family->name) . '_' . time() . uniqid();
+        $connection = app()->runningUnitTests() ? env('DB_FAMILY_DATABASE') : time() . uniqid();
         $family->connection_name = $connection;
         config([
             'database.connections.migration' => array_merge(config('database.connections.main'), [

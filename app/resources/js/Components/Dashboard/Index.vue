@@ -4,7 +4,7 @@
     >
         <div class="flex">
             <span class="text-xxxl text-white font-bold">
-                {{ $t('dashboard.title.hello')}}
+                {{ $t('dashboard.title.hello', { name: userName })}}
             </span>
         </div>
         <span @click="logout" class="mt-5">Logout</span>
@@ -14,6 +14,7 @@
 import {useStore} from 'vuex';
 import {useRouter} from 'vue-router';
 import VPage from '@/Components/Layout/Page';
+import {computed} from 'vue';
 
 export default {
     name: 'Dashboard',
@@ -23,6 +24,9 @@ export default {
         const router = useRouter();
 
         return {
+            userName: computed(() => {
+                return store.getters['auth/user'].name
+            }),
             logout() {
                 store.commit('app/loading', true);
                 store.dispatch('auth/logout').then(() => {

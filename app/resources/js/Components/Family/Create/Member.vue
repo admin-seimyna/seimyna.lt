@@ -1,78 +1,98 @@
 <template>
-    <div class="w-full flex flex-col px-10 py-5">
-        <span class="h1 text-xxxl mt-auto text-center w-full">
-            {{ isEdit ? $t('family.title.member') : $t('family.title.new_member') }}
-        </span>
+    <VForm action="/member/create" class="w-full flex flex-col px-10 py-5"
+           @success="save"
+    >
+        <template #default="{data, progress, errors}">
+            <span class="h1 text-xxxl mt-auto text-center w-full">
+                {{ isEdit ? $t('family.title.member') : $t('family.title.new_member') }}
+            </span>
 
-        <VInput v-model="member.name"
-                :title="$t('field.title.name')"
-                class="mt-5"
-        />
+            <VInput v-model="member.name"
+                    :errors="errors"
+                    :title="$t('field.title.name')"
+                    name="name"
+                    class="mt-5"
+            />
 
-        <VOptions v-model="member.gender"
-                  vertical
-                  :payload="genderOptions"
-                  class="mt-5"
-        >
-            <template #default="{option}">
-                <div class="option flex-col items-center justify-center"
-                     :class="{
+            <VOptions v-model="member.gender"
+                      vertical
+                      :payload="genderOptions"
+                      class="mt-5"
+                      name="gender"
+                      :errors="errors"
+            >
+                <template #default="{option}">
+                    <div class="option flex-col items-center justify-center"
+                         :class="{
                         'option--selected': option.selected
                      }"
+                    >
+                        <i :class="`icon-${option.id} text-xxxl`" />
+                        <span class="mt-1">{{ option.name }}</span>
+                    </div>
+                </template>
+            </VOptions>
+
+            <div class="flex flex-col my-5">
+                <Switch v-model="member.invite"
+                        name="invite"
+                        :title="$t('family.title.invite_member')"
+                />
+
+                <VInput v-if="member.invite"
+                        v-model="member.email"
+                        name="email"
+                        class="mt-5"
+                        :errors="errors"
+                />
+            </div>
+
+            <input type="hidden" name="validate_only" value="1" />
+
+            <div class="flex items-center justify-around mt-5">
+                <VButton basic
+                         type="span"
+                         @click="close"
                 >
-                    <i :class="`icon-${option.id} text-xxxl`" />
-                    <span class="mt-1">{{ option.name }}</span>
-                </div>
-            </template>
-        </VOptions>
+                    {{ $t('common.button.cancel') }}
+                </VButton>
 
-        <VOptions v-if="member.gender"
-                  v-model="member.status"
-                  :payload="statuses"
-                  class="mt-5"
-        />
+                <VButton v-if="isEdit"
+                         type="span"
+                         danger
+                         bordered
+                         @click="remove"
+                >
+                    {{ $t('common.button.delete') }}
+                </VButton>
 
-        <div class="flex items-center justify-around mt-5">
-            <VButton basic
-                     @click="close"
-            >
-                {{ $t('common.button.cancel') }}
-            </VButton>
-
-            <VButton v-if="isEdit"
-                     danger
-                     bordered
-                     @click="remove"
-            >
-                {{ $t('common.button.delete') }}
-            </VButton>
-
-            <VButton primary
-                     :disabled="addIsDisabled"
-                     @click="save"
-            >
-                {{ $t(isEdit ? 'common.button.save' : 'common.button.add') }}
-            </VButton>
-        </div>
-    </div>
+                <VButton primary
+                         :progress="progress"
+                >
+                    {{ $t(isEdit ? 'common.button.save' : 'common.button.add') }}
+                </VButton>
+            </div>
+        </template>
+    </VForm>
 </template>
 <script>
 import {computed, inject, ref} from 'vue';
 import VOptions from '@/Elements/Options';
 import VInput from '@/Elements/Input';
 import VButton from '@/Elements/Button';
+import Switch from '@/Elements/Switch';
+import VForm from '@/Elements/Form';
 
 export default {
     name: 'Member',
-    components: {VButton, VInput, VOptions},
+    components: {VForm, Switch, VButton, VInput, VOptions},
     props: {
         members: Array,
-        index: Object,
+        index: Number,
     },
     emits: ['close'],
     setup(props, { emit }) {
         const app = inject('app');
-        const statuses = app.constant.get('member_status');
         const member = ref(Object.assign({
             gender: null,
             status: null,
@@ -82,20 +102,6 @@ export default {
             return typeof props.index !== 'undefined';
         });
 
-        function getStatusOrder(id) {
-            switch (id) {
-                case statuses.GRANDFATHER:
-                case statuses.GRANDMOTHER:
-                    return 0;
-                case statuses.FATHER:
-                case statuses.MOTHER:
-                    return 1;
-                case statuses.SON:
-                case statuses.DAUGHTER:
-                    return 2;
-            }
-        }
-
         function close() {
             emit('close');
         }
@@ -104,33 +110,16 @@ export default {
             member,
             genderOptions: app.constant.asPayload('gender', 'member.title.gender.'),
             isEdit,
-            statuses: computed(() => {
-                const gender = app.constant.get('gender');
-
-                return app.constant.asPayload('member_status', 'member.title.status.').filter((status) => {
-                    if (member.value.gender === gender.MALE) {
-                        return [statuses.FATHER, statuses.SON, statuses.GRANDFATHER].indexOf(status.id) !== -1;
-                    }
-                    return [statuses.MOTHER, statuses.DAUGHTER, statuses.GRANDMOTHER].indexOf(status.id) !== -1;
-                }).sort((a, b) => {
-                    return getStatusOrder(a.id) - getStatusOrder(b.id);
-                });
-            }),
-            addIsDisabled: computed(() => {
-                for (const key of ['gender', 'status', 'name']) {
-                    if (!member.value[key]) {
-                        return true;
-                    }
-                }
-
-                return false;
-            }),
             close,
             remove() {
                 props.members.splice(props.index, 1);
                 close();
             },
             save() {
+                if (!member.value.invite) {
+                    member.value.email = null;
+                }
+
                 if (isEdit.value) {
                     props.members[props.index] = member.value;
                 } else {

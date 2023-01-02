@@ -50,6 +50,17 @@
             </template>
         </VForm>
 
+        <div class="flex flex-col my-5">
+            <VButton shadow
+                     class="bg-white"
+                     @click="openInvitationForm"
+            >
+                <span class="text-primary-500">
+                    {{ $t('auth.button.has_invitation_code') }}
+                </span>
+            </VButton>
+        </div>
+
         <VButton rounded
                  @click="emit('back')"
                  class="w-16 h-16 bg-white shadow-xl mt-10"
@@ -65,16 +76,25 @@ import VButton from '@/Elements/Button';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import VPage from '@/Components/Layout/Page';
+import Invitation from '@/Components/Auth/Invitation/Index';
+import {inject} from 'vue';
 
 export default {
     name: 'SignUpForm',
     components: {VPage, VButton, VInput, VForm},
     emits: ['back'],
     setup(props, { emit }) {
+        const app = inject('app');
         const router = useRouter();
         const store = useStore();
+
         return {
             emit,
+            openInvitationForm() {
+                app.modal({
+                    component: Invitation,
+                });
+            },
             onSuccess(data) {
                 router.push({
                     name: 'verify',

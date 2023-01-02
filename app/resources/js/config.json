@@ -1,1 +1,1 @@
-{"system":{"app":{"name":"\u0160eimyna"},"auth":{"verification":{"code_length":4,"resend_period":1}}}}
+{"system":{"app":{"name":"\u0160eimyna"},"auth":{"verification":{"code_length":4,"resend_period":1},"invitation":{"code_length":6}}}}

@@ -77,10 +77,11 @@ abstract class TestCase extends BaseTestCase
      */
     protected function connectFamily(): self
     {
-        $family = Auth::user()->family()->first();
+        $user = Auth::user();
+        $family = $user->currentFamily()->first();
         if (!$family) {
             DB::statement('drop database if exists ' . env('DB_FAMILY_DATABASE'));
-            $family = Family::factory()->create();
+            $family = Auth::user()->family()->create(Family::factory()->raw());
             $family->connect();
             Member::factory()->create(['user_id' => Auth::id()]);
         } else {

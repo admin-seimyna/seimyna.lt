@@ -8,6 +8,16 @@ return [
         'members' => 'Šeimos nariai',
         'member' => 'Šeimos narys',
         'new_member' => 'Naujas narys',
+        'invite_member' => 'Pakviesti prisijungti prie šeimynos',
+    ],
+
+    'button' => [
+        'add_member' => 'Pridėti narį',
+    ],
+
+    'message' => [
+        'creating_new_family' => 'Kuriama nauja <b class="font-bold">"{name}"</b> šeimyna...',
+        'successfully_created' => 'Šeimyna sėkmingai sukurta!',
     ],
 
     'prompt' => [

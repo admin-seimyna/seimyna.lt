@@ -43,8 +43,7 @@ class Family extends Model
             return;
         }
 
-        Cache::forget(User::getConnectionKey());
-        Cache::forget(User::getFamilyKey());
+        $this->disconnect();
 
         Cache::rememberForever(User::getFamilyKey(), function () {
             return $this->id;
@@ -58,6 +57,16 @@ class Family extends Model
             DB::setDefaultConnection(User::getConnectionKey());
             return $clientConnection;
         });
+    }
+
+    /**
+     * @param callable $callback
+     */
+    public function connectMoment(callable $callback): void
+    {
+        $this->connect();
+        $callback();
+        $this->disconnect();
     }
 
     /**
@@ -75,18 +84,21 @@ class Family extends Model
     public function disconnect(): void
     {
         Cache::forget(User::getConnectionKey());
+        Cache::forget(User::getFamilyKey());
     }
 
     /**
      * @param string $identifier
+     * @param string $name
      * @param int $memberId
      * @return Model
      */
-    public function inviteViaEmail(string $identifier, int $memberId): Model
+    public function inviteViaEmail(string $identifier, string $name, int $memberId): Model
     {
         return $this->invitation()->create([
             'type' => MemberInvitationTypesEnum::EMAIL,
             'identifier' => $identifier,
+            'name' => $name,
             'member_id' => $memberId
         ]);
     }

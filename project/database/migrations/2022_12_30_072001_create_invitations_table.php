@@ -21,9 +21,12 @@ class CreateInvitationsTable extends Migration
             $table->string('code');
             $table->enum('type', \App\Enum\MemberInvitationTypesEnum::values()->toArray());
             $table->string('identifier');
+            $table->string('name');
             $table->dateTime('expires_in');
             $table->dateTime('activated_at')->nullable();
             $table->timestamps();
+
+            $table->unique(['identifier', 'family_id']);
 
             $table->foreign('family_id')
                 ->references('id')

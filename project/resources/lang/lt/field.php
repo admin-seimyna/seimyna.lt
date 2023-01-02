@@ -6,6 +6,7 @@ return [
         'email' => 'El. paštas',
         'password' => 'Slaptažodis',
         'name' => 'Vardas',
+        'confirmation' => 'Slaptažodžio patvirtinimas'
     ],
 
     'placeholder' => [

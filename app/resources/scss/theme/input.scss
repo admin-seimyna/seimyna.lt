@@ -49,8 +49,9 @@ input[type="number"] {
 }
 
 
-input[type="number"].verify {
-  @apply bg-transparent border-b-4 border-solid border-gray-600 text-center;
+input[type="number"].verify,
+input[type="text"].verify {
+  @apply bg-transparent border-b-4 border-solid border-gray-600 text-center uppercase;
   height: 40px;
   width: 40px;
   font-size: 2rem;

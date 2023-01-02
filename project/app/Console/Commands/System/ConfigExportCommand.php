@@ -44,7 +44,8 @@ class ConfigExportCommand extends Command
                     'name' => config('app.name'),
                 ],
                 'auth' => [
-                    'verification' => config('auth.verification')
+                    'verification' => config('auth.verification'),
+                    'invitation' => config('auth.invitation'),
                 ]
             ]
         ];

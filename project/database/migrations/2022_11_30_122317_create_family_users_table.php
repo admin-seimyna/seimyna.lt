@@ -16,6 +16,7 @@ class CreateFamilyUsersTable extends Migration
         Schema::create('family_users', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('family_id');
+            $table->unique('user_id', 'family_id');
 
             $table->foreign('user_id')
                 ->references('id')

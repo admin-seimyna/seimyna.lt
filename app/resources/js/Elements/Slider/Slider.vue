@@ -13,7 +13,11 @@
                      :name="`slide-${slide.name}-${index}`"
                      :class="`slider-slide-${id} slide-${slide.name}`"
         >
-            <slot :name="slide.name" />
+            <slot :name="slide.name"
+                  v-bind="{
+                    active: index === activeSlideIndex,
+                  }"
+            />
         </SliderSlide>
     </div>
 </template>
@@ -181,6 +185,7 @@ export default {
             id,
             sliderRef,
             isScrolling,
+            activeSlideIndex,
             scrollTo,
             slideTo(name) {
                 const index = props.slides.findIndex(slide => slide.name === name);

@@ -7,6 +7,7 @@ use App\Jobs\SendMail;
 use App\Mail\InvitationMail;
 use App\Models\Family\Family;
 use App\Models\Family\Member;
+use App\Models\Invitation;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
@@ -154,7 +155,7 @@ class FamilyTest extends TestCase
         $member = Member::orderByDesc('id')->first();
         $this->assertEquals($memberData['name'], $member->name);
         $this->assertCount(2, Member::get());
-        $this->assertTrue($member->invitation()->exists());
+        $this->assertNotEmpty(Invitation::where('member_id', $member->id)->first());
     }
 
 }

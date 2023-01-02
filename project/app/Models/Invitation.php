@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Family\Family;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,6 +13,8 @@ use Illuminate\Support\Str;
 class Invitation extends Model
 {
     use HasFactory;
+
+    protected $connection = 'main';
 
     /**
      * @var string|null
@@ -24,7 +27,9 @@ class Invitation extends Model
     protected $fillable = [
         'type',
         'identifier',
-        'member_id'
+        'member_id',
+        'family_id',
+        'name'
     ];
 
     /**
@@ -32,9 +37,18 @@ class Invitation extends Model
      */
     public function generateCode(): string
     {
-        $this->originalCode = mb_strtoupper(Str::random(6));
+        $this->originalCode = mb_strtoupper(Str::random(config('auth.invitation.code_length')));
         $this->code = Hash::make($this->originalCode);
         return $this->code;
+    }
+
+    /**
+     * @return bool
+     */
+    public function accept(): bool
+    {
+        $this->activated_at = Carbon::now();
+        return $this->save();
     }
 
     /**

@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Models\Family\Family;
+use App\Models\Family\FamilyUser;
 use App\Models\Family\Member;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -96,11 +98,12 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * @return Family|null
+     * @return HasOneThrough
      */
-    public function currentFamily(): ?Family
+    public function currentFamily(): HasOneThrough
     {
-        return $this->family()->where('id', Cache::get(static::getFamilyKey()));
+        return $this->hasOneThrough(Family::class, FamilyUser::class, 'user_id', 'id', 'id', 'family_id')
+            ->where('id', Cache::get(static::getFamilyKey()));
     }
 
     /**

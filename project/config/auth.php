@@ -13,6 +13,10 @@ return [
         'resend_period' => 1 // in minutes
     ],
 
+    'invitation' => [
+        'code_length' => 6,
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Authentication Defaults

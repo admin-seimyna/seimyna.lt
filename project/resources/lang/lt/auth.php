@@ -1,6 +1,17 @@
 <?php
 
 return [
+    'title' => [
+        'login' => 'Prisijungimas',
+        'signup' => 'Registracija',
+        'reset-password' => 'Slaptažodžio atstatymas',
+        'login-with-social'=> 'arba prisijunkite su',
+        'verification' => [
+            'email' => 'Patvirtinimas'
+        ],
+        'invitation' => 'Pakvietimas',
+    ],
+
     'message' => [
         'failed' => 'TŠie kredencialai neatitinka mūsų įrašų.',
         'password' => 'Pateiktas slaptažodis neteisingas.',
@@ -16,16 +27,7 @@ return [
         'verification_expired' => 'Kodo galiojimas yra pasibaigęs.',
         'verification_not_found' => 'Patvirtinimo kodas nerastas.',
         'verification_resend_success' => 'Naujas patvirtinimo kodas sėkmingai išsiųstas!',
-    ],
-
-    'title' => [
-        'login' => 'Prisijungimas',
-        'signup' => 'Registracija',
-        'reset-password' => 'Slaptažodžio atstatymas',
-        'login-with-social'=> 'arba prisijunkite su',
-        'verification' => [
-            'email' => 'Patvirtinimas'
-        ],
+        'invitation_is_expired' => 'Pakvietimo galiojimas yra pasibaigęs. Kreipkitės į Jus pakvietūsį asmenį, kad išsiųstu naują pakvietimą.',
     ],
 
     'button' => [
@@ -34,6 +36,7 @@ return [
         'send' => 'Siųsti',
         'forgot-password' => 'Pamiršote?',
         'verify' => 'Patvirtinti',
-        'resend_verification_code' => 'Siųsti dar kartą'
-    ]
+        'resend_verification_code' => 'Siųsti dar kartą',
+        'has_invitation_code' => 'Turiu pakvietomo kodą',
+    ],
 ];

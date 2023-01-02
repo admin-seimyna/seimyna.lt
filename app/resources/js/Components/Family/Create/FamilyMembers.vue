@@ -1,12 +1,31 @@
 <template>
-    <VPage>
+    <VPage class="px-10">
+        <span class="h1 text-xxxl mt-auto text-center w-full">
+            {{ $t('family.title.members') }}
+        </span>
 
-        <Tree :tree="tree"
-              :members="members"
-        />
+        <ul class="flex flex-col my-5">
+            <li v-for="(member, index) in members"
+                :key="`member-${index}`"
+                @click="editMember(index)"
+                class="flex items-center bg-white rounded border mb-1 p-3"
+            >
+                <Avatar :subject="member"
+                        class="w-12 h-12"
+                />
+                <span class="font-semibold ml-3 ellipsis">
+                    {{ member.name }}
+                </span>
+            </li>
+
+            <li class="flex items-center justify-center bg-white rounded border border-primary-500 border-dashed text-primary-500 p-3"
+                @click="addMember"
+            >
+                + {{ $t('family.button.add_member')}}
+            </li>
+        </ul>
 
         <FamilyCreateFooter
-            class="px-10"
             :progress="progress"
             @back="emit('back')"
         />
@@ -16,14 +35,13 @@
 import VPage from '@/Components/Layout/Page';
 import FamilyCreateFooter from '@/Components/Family/Create/Footer';
 import Avatar from '@/Elements/Avatar';
-import {inject, reactive, ref} from 'vue';
 import VButton from '@/Elements/Button';
-import Tree from '@/Elements/Tree/Tree';
+import Member from '@/Components/Family/Create/Member';
+import {inject} from 'vue';
 
 export default {
     name: 'FamilyMembers',
     components: {
-        Tree,
         VButton,
         Avatar,
         FamilyCreateFooter,
@@ -31,73 +49,34 @@ export default {
     },
     props: {
         progress: Boolean,
+        members: Array
     },
     emits: ['back'],
     setup(props, { emit }) {
-        const members = reactive([
-            { id: 1, name: 'Juozas'},
-            { id: 2, name: 'Galina'},
-            { id: 3, name: 'Julius'},
-            { id: 4, name: 'Danutė'},
-            { id: 5, name: 'Ignas'},
-            { id: 6, name: 'Ramūnas'},
-            { id: 7, name: 'Adomas'},
-            { id: 8, name: 'Lukas'},
-            { id: 9, name: 'Amelija'},
-            { id: 10, name: 'Kajus'},
-            { id: 11, name: 'Danielė'},
-            { id: 12, name: 'Angelina'},
-            { id: 13, name: 'Kotryna'},
-            { id: 14, name: 'Agnė'},
-        ])
-        const tree = reactive([
-            {
-                people: [1,2],
-                children: [
-                    {
-                        people: [12],
-                        children: [],
-                    }
-                ],
-            },
-            {
-                people: [3,4],
-                children: [
-                    {
-                        people: [5,12],
-                        children: [
-                            {
-                                people: [8],
-                                children: [],
-                            },
-                            {
-                                people: [9],
-                                children: [],
-                            }
-                        ],
-                    },{
-                        people: [6,14],
-                        children: [
-                            {
-                                people: [10],
-                                children: [],
-                            }, {
-                                people: [11],
-                                children: [],
-                            }
-                        ],
-                    },{
-                        people: [7,13],
-                        children: [],
-                    }
-                ],
-            },
-        ])
+        const app = inject('app');
+
+        function openMemberModal(index) {
+            app.modal({
+                component: Member,
+                props: {
+                    members: props.members,
+                    index
+                },
+                options: {
+                    type: 'popup'
+                }
+            });
+        }
 
         return {
             emit,
-            tree,
-            members,
+            addMember() {
+                openMemberModal();
+            },
+            editMember(index) {
+                if (!index) return;
+                openMemberModal(index);
+            }
         };
     },
 }

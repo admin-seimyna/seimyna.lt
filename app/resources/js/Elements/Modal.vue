@@ -1,23 +1,23 @@
 <template>
     <teleport to="body">
         <transition v-for="(modal, index) in modals"
-                    :key="`${modal.id}-${index}`"
+                    :key="`${modal.value.id}-${index}`"
                     appear
                     name="modal"
         >
-            <div v-if="modal.active"
+            <div v-if="modal.value.active"
                  ref="modalRef"
                  class="modal"
-                 :class="[modal.zIndex,`modal--${modal.options.type}`]"
+                 :class="[modal.value.zIndex,`modal--${modal.value.options.type}`]"
                  :style="{
                      'transition-duration': transitionDuration
                  }"
                  @click="closeOnOutside($event, index)"
             >
                 <div class="modal-content">
-                    <component :is="modal.component"
+                    <component :is="modal.value.component"
                                ref="componentRef"
-                               v-bind="modal.props"
+                               v-bind="modal.value.props"
                                @close="close(index)"
                     />
                 </div>
@@ -26,7 +26,7 @@
     </teleport>
 </template>
 <script>
-import {computed, inject, reactive, ref} from 'vue';
+import {computed, inject, onBeforeUnmount, reactive, ref} from 'vue';
 
 export default {
     name: 'Modal',
@@ -44,17 +44,18 @@ export default {
 
         function open(modal) {
             return new Promise((resolve, reject) => {
+                modal = ref(modal);
                 const id = Math.random().toString(16).slice(2);
-                modal.id = id;
-                modal.zIndex = 1000 + modals.length;
-                modal.active = true;
-                modal.options = Object.assign({
+                modal.value.id = id;
+                modal.value.zIndex = 1000 + modals.length;
+                modal.value.active = true;
+                modal.value.options = Object.assign({
                     type: 'vertical',
                     disableBackButton: false
-                },modal.options || {})
+                },modal.value.options || {})
                 modals.push(modal);
 
-                if (modal.options.disableBackButton) {
+                if (modal.value.options.disableBackButton) {
                     app.back.disable();
                 } else {
                     app.back.on(`modal-${id}`, () => {
@@ -63,7 +64,7 @@ export default {
                 }
 
                 setTimeout(() => {
-                    const index = modals.findIndex(component => component.id === id);
+                    const index = modals.findIndex(modal => modal.value.id === id);
                     resolve(componentRef.value[index]);
                 }, props.transition);
             });
@@ -74,15 +75,16 @@ export default {
             if (!modal) {
                 return;
             }
-            modal.active = false;
-            if (modal.options.disableBackButton) {
+            modals[index].value.active = false;
+            if (modal.value.options.disableBackButton) {
                 app.back.enable();
             } else {
-                app.back.off(`modal-${modal.id}`);
+                app.back.off(`modal-${modal.value.id}`);
             }
+
             setTimeout(() => {
-                if (typeof modal.onClose === 'function') {
-                    modal.onClose();
+                if (typeof modal.value.onClose === 'function') {
+                    modal.value.onClose();
                 }
                 modals.splice(index, 1);
             }, props.transition);
@@ -90,6 +92,14 @@ export default {
 
         app.register('modal', open).then((options) => {
             // do something if you want
+        });
+
+        app.bus.on('modal:closeAll', () => {
+            modals.forEach((m, index) => close(index));
+        });
+
+        onBeforeUnmount(() => {
+            app.bus.off('modal:closeAll');
         });
 
         return {
@@ -102,7 +112,7 @@ export default {
             }),
 
             closeOnOutside(e, index) {
-                if (modals[index].options.type === 'popup' && modalRef.value[index] === e.target) {
+                if (modals[index].value.options.type === 'popup' && modalRef.value[index] === e.target) {
                     close(index);
                 }
             }

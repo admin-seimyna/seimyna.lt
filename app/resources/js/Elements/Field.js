@@ -14,6 +14,7 @@ const fieldProps = {
     error: String,
     errors: Object,
     title: String,
+    disableTitle: Boolean,
 };
 
 const useField = (props) => {
@@ -21,6 +22,7 @@ const useField = (props) => {
     const errorMessage = computed(() => {
         if (!props.error && !props.errors) return null;
         if (props.error) return props.error;
+        if (!props.name) return null;
 
         let key = props.name.replaceAll('][', '.');
         key = key.replaceAll('[', '.');
@@ -32,7 +34,8 @@ const useField = (props) => {
     return {
         errorMessage,
         label: computed(() => {
-            return props.title || t(`field.title.${props.name}`);
+            if (props.disableTitle) return;
+            return props.title || (props.name ? t(`field.title.${props.name}`) : null);
         }),
         hasError: computed(() => {
             return !!errorMessage.value;

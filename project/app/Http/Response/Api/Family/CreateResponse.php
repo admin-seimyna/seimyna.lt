@@ -74,7 +74,7 @@ class CreateResponse extends Response
     {
         $member = Member::create($data);
         if (empty($data['user_id']) && !empty($data['invite'])) {
-            $this->family->inviteViaEmail($data['email'], $member->id);
+            $this->family->inviteViaEmail($data['email'], $member->name, $member->id);
         }
     }
 }

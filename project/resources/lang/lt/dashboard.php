@@ -2,6 +2,6 @@
 
 return [
     'title' => [
-        'hello' => 'Labas, Ignai'
+        'hello' => 'Labas, {name}'
     ]
 ];

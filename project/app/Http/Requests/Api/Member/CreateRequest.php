@@ -14,13 +14,17 @@ class CreateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'validate_only' => 'boolean',
             'name' => 'required',
             'gender' => 'required|in:' . GenderEnum::values()->join(','),
             'invite' => 'boolean',
-            'email' => 'required_if:invite,1|email',
         ];
+
+        if (!!$this->input('invite')) {
+            $rules['email'] = 'required|email';
+        }
+        return $rules;
     }
 
     /**

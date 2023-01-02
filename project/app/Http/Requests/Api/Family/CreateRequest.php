@@ -38,7 +38,7 @@ class CreateRequest extends FormRequest
      */
     public function completed(): bool
     {
-        return $this->input('step', 1) === 3;
+        return (int)$this->input('step', 1) === 4;
     }
 
     /**
@@ -46,7 +46,7 @@ class CreateRequest extends FormRequest
      */
     public function getNextStep(): int
     {
-        return $this->input('step', 1) + 1;
+        return (int)$this->input('step', 1) + 1;
     }
 
     /**
@@ -55,7 +55,7 @@ class CreateRequest extends FormRequest
     private function firstStepRules(): array
     {
         return [
-            'step' => 'required|numeric|min:1|max:3',
+            'step' => 'required|numeric|min:1|max:4',
             'name' => 'required',
         ];
     }

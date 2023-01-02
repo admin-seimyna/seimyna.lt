@@ -21,21 +21,11 @@
 
                 <template v-else>
                     <template v-if="!verification.is_expired">
-                        <div class="flex">
-                            <input
-                                v-for="(value, index) in code"
-                                v-model="code[index]"
-                                ref="inputRef"
-                                :key="index"
-                                type="number"
-                                name="code[]"
-                                class="verify mr-2"
-                                :class="{'verify--filled': code[index]}"
-                                placeholder="*"
-                                @input="onChange(index)"
-                                @keyup="onKeyUp($event, index)"
-                            />
-                        </div>
+                        <VerificationCode
+                            ref="codeRef"
+                            :length="codeLength"
+                            @complete="submitForm"
+                        />
 
                         <p class="mt-5 text-text-light">
                             {{ $t('auth.message.verify.email')}}
@@ -44,7 +34,9 @@
 
                     <template v-else>
                         <div class="flex flex-col items-center">
-                            <p class="text-center">{{ $t('auth.message.verification_is_expired')}}</p>
+                            <p class="text-center">
+                                {{ $t('auth.message.verification_is_expired')}}
+                            </p>
                             <VButton
                                 type="span"
                                 primary
@@ -92,10 +84,12 @@ import axios from 'axios';
 import {useStore} from 'vuex';
 import {useI18n} from 'vue-i18n';
 import VPage from '@/Components/Layout/Page';
+import VerificationCode from '@/Elements/VerificationCode';
 
 export default {
     name: 'Verification',
     components: {
+        VerificationCode,
         VPage,
         VSpinner,
         VButton,
@@ -104,26 +98,14 @@ export default {
     },
     setup(props) {
         const app = inject('app');
-        const inputRef = ref(null);
         const formRef = ref(null);
+        const codeRef = ref(null);
         const route = useRoute();
         const loading = ref(true);
-        const code = reactive([]);
         const router = useRouter();
         const verification = ref(null);
         const store = useStore();
         const t = useI18n().t;
-
-        const codeLength = app.config.get('system.auth.verification.code_length');
-        for(let x = 0; x < codeLength; x++) {
-            code.push(null);
-        }
-
-        const codeIsEntered = computed(() => {
-            let value = 0;
-            code.forEach(val => value += typeof val !== 'undefined' && val !== null && !isNaN(val) && val !== '' ? 1 : 0);
-            return value >= codeLength;
-        });
 
         axios.get(`/verify/${route.params.token}`).then((response) => {
             verification.value = response.data;
@@ -131,67 +113,33 @@ export default {
         });
 
         return {
-            inputRef,
             formRef,
             type: route.params.type,
             token: route.params.token,
-            code,
             loading,
             verification,
-            onChange(index) {
-                const input = inputRef.value[index];
-                if (!input.value.length) {
-                    return;
-                }
-
-                input.value = input.value[0];
-                index++;
-
-                if (codeIsEntered.value) {
-                    formRef.value.submit();
-                    return;
-                }
-
-                if (index >= code.length) return;
-
-                inputRef.value[index].focus();
-            },
-
-            onKeyUp(e, index) {
-                const input = inputRef.value[index];
-                if (input.value.length) {
-                    return;
-                }
-
-                index--;
-                if (index < 0) return;
-                if (e.key === 'Backspace') {
-                    inputRef.value[index].focus();
-                }
-            },
-
+            codeLength: app.config.get('system.auth.verification.code_length'),
             onSubmit(status) {
                 loading.value = status;
                 if (!status) {
-                    code.forEach((value, index) => code[index] = null);
+                   codeRef.value.clear();
                 }
             },
-
             onSuccess() {
                 router.push({ name: 'dashboard'});
             },
-
             onError() {
                 app.dialog.defaultAlert(t('validation.code'));
             },
-
             logout() {
                 store.commit('app/loading', true);
                 store.dispatch('auth/logout').then(() => {
                     router.push({ name: 'login' });
                 });
             },
-
+            submitForm() {
+                formRef.value.submit();
+            },
             resend() {
                 loading.value = true;
                 axios.post(`/verify/${verification.value.type}/${verification.value.token}/resend`)

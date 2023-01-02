@@ -30,8 +30,7 @@ class InvitationMail extends Mailable
      */
     public function __construct(Invitation $invitation, string $code)
     {
-        $this->invitation = $invitation->load(['author:id,name']);
-        $this->invitation->setRelation('member', Member::find($this->invitation->member_id));
+        $this->invitation = $invitation->load(['author:id,name', 'family']);
         $this->code = $code;
     }
 
@@ -50,8 +49,12 @@ class InvitationMail extends Mailable
      */
     public function build()
     {
-        return $this->to($this->invitation->identifier, $this->invitation->member->name)
-            ->subject(trans('mail.title.verification.' . $this->type))
+        $member = null;
+        $this->invitation->family->connectMoment(function() use (&$member) {
+            $member = Member::find($this->invitation->member_id);
+        });
+        return $this->to($this->invitation->identifier, $member->name)
+            ->subject(trans('mail.title.verification.' . $this->invitation->type))
             ->markdown('mail.message',[
                 'subject' => 'Invitation', // todo: change to normal text
                 'code' => $this->code,

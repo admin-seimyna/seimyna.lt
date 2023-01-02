@@ -23,6 +23,7 @@ class Verification extends Model
         'module_id',
         'code',
         'type',
+        'verified_at'
     ];
 
     /**

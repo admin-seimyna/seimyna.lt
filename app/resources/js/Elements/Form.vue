@@ -9,7 +9,7 @@
     </form>
 </template>
 <script>
-import {computed, reactive, ref} from 'vue';
+import {computed, inject, reactive, ref} from 'vue';
 import axios from 'axios';
 
 export default {
@@ -32,6 +32,7 @@ export default {
         ],
     },
     setup(props, {emit}) {
+        const app = inject('app');
         const formRef = ref(null);
         const progress = ref(false);
         const errors = reactive({value: {}});
@@ -63,6 +64,16 @@ export default {
                         const response = error.response ? error.response : error;
                         reject(response);
                         if (!response.data) return;
+                        if (!response.data.errors) {
+                            if (response.data.message) {
+                                app.dialog.defaultAlert(response.data.message);
+                            }
+                            emit('error', errors.value);
+                            progress.value = false;
+                            emit('progress', false);
+                            return;
+                        }
+
                         handleErrors(response.data.errors);
                         emit('error', errors.value);
                         progress.value = false;

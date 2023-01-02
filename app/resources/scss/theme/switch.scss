@@ -1,0 +1,17 @@
+.switch {
+  @apply flex items-center rounded-full w-14 h-8 bg-gray-100 border border-gray-100;
+
+  &--on {
+    @apply bg-primary-500 border-primary-500;
+
+    .switch__circle {
+      @apply shadow-lg left-6 bg-white;
+    }
+  }
+
+  &__circle {
+    @apply w-7 h-7 shrink-0 rounded-full absolute top-1/2 left-1 bg-gray-500;
+    transform: translateY(-50%);
+    transition: left .25s;
+  }
+}

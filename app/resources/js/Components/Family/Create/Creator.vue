@@ -4,22 +4,16 @@
             {{ $t('family.title.creator_name_and_gender') }}
         </span>
 
-        <VInput v-model="memberName"
+        <VInput v-model="member.name"
                 :title="$t('field.title.name')"
-                name="members[0][name]"
                 class="my-5"
         />
 
-        <input type="hidden"
-               name="members[0][user_id]"
-               :value="userId"
-        />
-
-        <VOptions name="members[0][gender]"
+        <VOptions v-model="member.gender"
                   vertical
+                  name="members[0][gender]"
                   :errors="errors"
                   :payload="genderOptions"
-                  @change="onSelectGender"
         >
             <template #default="{option}">
                 <div class="option flex-col items-center justify-center"
@@ -55,33 +49,18 @@ export default {
         VPage
     },
     props: {
-        userId: Number,
-        name: String,
-        gender: String,
-        status: String,
+        members: Array,
         progress: Boolean,
         errors: Object,
     },
     emits: ['back'],
     setup(props, { emit }) {
         const app = inject('app');
-        const memberName = ref(props.name);
-
-        watch(
-            () => memberName.value,
-            (value) => emit('update:name', value)
-        );
 
         return {
-            memberName,
+            member: computed(() => props.members[0]),
             emit,
             genderOptions: app.constant.asPayload('gender', 'member.title.gender.'),
-            onChangeStatus(status) {
-                emit('update:status', status);
-            },
-            onSelectGender(gender) {
-                emit('update:gender', gender);
-            },
         }
     }
 }

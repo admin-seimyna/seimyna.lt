@@ -55,7 +55,7 @@ export default {
         listClass: [String, Array, Object],
         ...fieldProps,
     },
-    emits: ['change'],
+    emits: ['change', 'update:modelValue'],
     setup(props, { emit }) {
         const selectedValues = reactive([]);
 

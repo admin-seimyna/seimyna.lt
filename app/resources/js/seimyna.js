@@ -10,6 +10,7 @@ import BackButton from '@/Utilities/BackButton';
 import AppStatusBar from '@/Utilities/AppStatusBar';
 import Config from '@/Utilities/Config';
 import Constants from '@/Utilities/Constants';
+import Bus from '@/Utilities/Bus';
 
 class Seimyna
 {
@@ -26,6 +27,7 @@ class Seimyna
     lang; // i18b
     config; // Application config
     constant; // Application constants
+    bus; // Event listener
 
     constructor(app, options) {
         this.app = app;
@@ -57,6 +59,7 @@ class Seimyna
         const i18n = (new Locale(this.options.i18n)).getI18n();
 
         this.statusbar = new AppStatusBar(this.options.statusBarColor, this.options.statusBarStyle);
+        this.bus = new Bus();
         this.back = new BackButton();
         this.splash = new Splash();
         this.formatter = new Formatter(this.options.i18n.locale, this.options.formatter);
@@ -65,7 +68,7 @@ class Seimyna
         this.notification = new Notification();
         this.config = new Config(this.options.config);
         this.constant = new Constants(this.options.constants, i18n.global.t);
-        this.app.use((new Router(this.options.routes, store)).getRouter());
+        this.app.use((new Router(this.options.routes, store, this.bus)).getRouter());
         this.app.use(store);
         this.app.use(i18n);
     }

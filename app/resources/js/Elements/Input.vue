@@ -51,12 +51,12 @@ export default {
     props: {
         ...fieldProps,
         modelValue: [String, Number],
-
         type: {
             type: String,
             default: 'text',
         },
     },
+    emits: ['update:modelValue'],
     setup(props, { slots, emit }) {
         const focused = ref(false);
         const inputValue = ref(props.modelValue);

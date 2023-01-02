@@ -3,14 +3,17 @@ import {createRouter, createWebHistory} from 'vue-router';
 export default class Router {
     router; // Vue router
     store; // Vuex store
+    bus; // App Bus
 
     /**
      * Constructor
      * @param routes
      * @param store
+     * @param bus
      */
-    constructor(routes = [], store) {
+    constructor(routes = [], store, bus) {
         this.store = store;
+        this.bus = bus;
         this.router = createRouter({
             history: createWebHistory(),
             routes
@@ -21,12 +24,27 @@ export default class Router {
     }
 
     /**
+     * Register before each callback
+     * @param callback
+     * @return {Router}
+     */
+    beforeEach(callback) {
+        this.beforeEachCallback = callback;
+        return this;
+    }
+
+    /**
      * Handle before each router
      * @private
      */
     _beforeEach() {
         this.router.beforeEach((to, from, next) => {
+            this.bus.emit('modal:closeAll');
             const user = this.store.getters['auth/user'];
+
+            if (typeof this.beforeEachCallback === 'function') {
+                this.beforeEachCallback();
+            }
 
             if (user) {
                 if (to.meta.public) {

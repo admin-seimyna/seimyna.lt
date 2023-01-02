@@ -40,7 +40,7 @@ export default {
         progress: Boolean,
         error: String,
     },
-    emits: ['cancel'],
+    emits: ['cancel', 'update:modelValue'],
     setup(props, {emit}) {
         const name = ref(props.modelValue);
 

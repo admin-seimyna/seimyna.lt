@@ -5,11 +5,13 @@ namespace App\Providers;
 use App\Events\NewUserRegistered;
 use App\Listeners\SendEmailVerificationCodeListener;
 use App\Models\Family\Family;
+use App\Models\Family\Finances\Requisition;
 use App\Models\Invitation;
 use App\Models\User;
 use App\Models\Verification;
 use App\Observers\FamilyObserver;
 use App\Observers\InvitationObserver;
+use App\Observers\RequisitionObserver;
 use App\Observers\UserObserver;
 use App\Observers\VerificationObserver;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -39,5 +41,6 @@ class EventServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         Verification::observe(VerificationObserver::class);
         Invitation::observe(InvitationObserver::class);
+        Requisition::observe(RequisitionObserver::class);
     }
 }

@@ -44,4 +44,20 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::group(['prefix' => 'member', 'as' => 'member.'], function () {
         Route::post('create', [\App\Http\Controllers\Api\MemberController::class, 'create'])->name('create');
     });
+
+    // Finances
+    Route::group(['prefix' => 'finances', 'as' => 'finances.'], function() {
+        // Nordigen
+        Route::group(['prefix' => 'nordigen', 'as' => 'nordigen.'], function() {
+            Route::post('/{bank}', [\App\Http\Controllers\Api\Finances\NordigenController::class, 'requisition'])->name('requisition');
+            Route::get('/{requisition}/accounts', [\App\Http\Controllers\Api\Finances\NordigenController::class, 'accounts'])->name('accounts');
+            Route::get('/account/transactions/{account}', [\App\Http\Controllers\Api\Finances\NordigenController::class, 'transactions'])->name('transactions');
+            Route::get('/account/balance/{account}', [\App\Http\Controllers\Api\Finances\NordigenController::class, 'balance'])->name('balance');
+        });
+
+        // Accounts
+        Route::group(['prefix' => 'account', 'as' => 'account.'], function() {
+            Route::post('/create', [\App\Http\Controllers\Api\Finances\BankAccountController::class, 'create'])->name('create');
+        });
+    });
 });

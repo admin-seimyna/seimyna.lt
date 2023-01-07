@@ -30,4 +30,11 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'nordigen' => [
+        'url' => env('NORDIGEN_URL'),
+        'id' => env('NORDIGEN_ID'),
+        'key' => env('NORDIGEN_KEY'),
+        'redirect' => env('NORDIGEN_REDIRECT'),
+        'expiration' => 90,
+    ]
 ];

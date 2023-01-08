@@ -38,18 +38,15 @@
 
     .modal-content {
       @apply absolute bottom-0 left-0 w-full max-h-full h-auto;
-      transition: bottom .25s, opacity .3s;
+      transition: transform .25s, opacity .3s;
     }
 
     &.modal-enter-from,
     &.modal-leave-to {
       .modal-content {
-        @apply -bottom-1/2 opacity-0;
+        @apply opacity-0;
+        transform: translateY(100%);
       }
-    }
-
-    &.modal-enter-to {
-      @apply -bottom-1/2;
     }
   }
 }

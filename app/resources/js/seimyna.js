@@ -11,6 +11,7 @@ import AppStatusBar from '@/Utilities/AppStatusBar';
 import Config from '@/Utilities/Config';
 import Constants from '@/Utilities/Constants';
 import Bus from '@/Utilities/Bus';
+import Browser from '@/Utilities/Browser';
 
 class Seimyna
 {
@@ -28,6 +29,7 @@ class Seimyna
     config; // Application config
     constant; // Application constants
     bus; // Event listener
+    browser; // InAppBrowser
 
     constructor(app, options) {
         this.app = app;
@@ -67,6 +69,7 @@ class Seimyna
         this.dialog = new Dialog(i18n.global.t);
         this.notification = new Notification();
         this.config = new Config(this.options.config);
+        this.browser = new Browser();
         this.constant = new Constants(this.options.constants, i18n.global.t);
         this.app.use((new Router(this.options.routes, store, this.bus)).getRouter());
         this.app.use(store);
@@ -88,6 +91,7 @@ class Seimyna
      */
     _ready(resolve) {
         setTimeout(() => {
+            window.open = cordova.InAppBrowser.open;
             this.statusbar.setDefaultColor();
             this.splash.hide();
             resolve();

@@ -8,9 +8,11 @@ use App\Models\Bank;
 use App\Models\Family\Finances\BankAccount;
 use App\Models\Family\Finances\Requisition;
 use App\Services\Nordigen\NordigenService;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class NordigenController extends Controller
 {
@@ -22,11 +24,22 @@ class NordigenController extends Controller
     {
         return ApiResponse::create()
             ->handle(function (ApiResponse $apiResponse) use ($bank) {
-                $requisition = Auth::user()->member->requisition()->where('bank_id', $bank->id)->first();
+                $requisition = Auth::user()
+                    ->member
+                    ->requisition()
+                    ->where('bank_id', $bank->id)
+                    ->active()
+                    ->first();
+
                 if (!$requisition) {
-                    $requisition = Auth::user()->member->requisition()->create(NordigenService::connect()->createRequisition($bank->id));
+                    $requisition = Auth::user()
+                        ->member
+                        ->requisition()
+                        ->create(['bank_id' => $bank->id]);
+
+                    $requisition->update(NordigenService::connect()->getRequisition($requisition));
                 }
-                return $requisition->only('link', 'id');
+                return $requisition->only('link', 'redirect', 'id', 'activated_at');
             })->json();
     }
 
@@ -41,7 +54,12 @@ class NordigenController extends Controller
                 $service = NordigenService::connect();
                 $response = $service->requisition($requisition->uid);
                 return collect($response['accounts'])->map(static function (string $accountId) use ($service, $requisition) {
-                    return $service->details($accountId, $requisition->id);
+                    $data = $service->details($accountId, $requisition->id);
+                    $account = BankAccount::where('iban', $data['iban'])->first();
+                    if ($account) {
+                        $data = array_merge($data, $account->toArray());
+                    }
+                    return $data;
                 })->toArray();
             })
             ->json();

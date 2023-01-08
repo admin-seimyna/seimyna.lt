@@ -2,7 +2,9 @@
 
 namespace App\Services\Nordigen;
 
+use App\Models\Bank;
 use App\Models\Family\Finances\BankAccount;
+use App\Models\Family\Finances\Requisition;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -43,29 +45,23 @@ class NordigenService
     }
 
     /**
-     * @param string $bankId
-     * @param string|null $agreementId
+     * @param Requisition $requisition
      * @return array
      */
-    public function createRequisition(string $bankId, ?string $agreementId = null): array
+    public function getRequisition(Requisition $requisition): array
     {
         $user = Auth::user();
-        $reference = $user->currentFamily->id . '_' . Auth::user()->member->id;
-        if (app()->runningUnitTests()) {
-            $reference = time().uniqid();
-        }
-
         $data = [
-            'redirect'  => config('services.nordigen.redirect'),
-            'institution_id'  => $bankId,
-            'reference'  => $reference,
+            'redirect'  => route('api.requisition.activate', [
+                'familyId' => $user->currentFamily->id,
+                'userId' => $user->id,
+            ]),
+            'institution_id'  => $requisition->bank->uid,
+            'reference'  => $requisition->ref,
             'user_language'  => config('app.locale'),
         ];
 
-        if ($agreementId) {
-            $data['agreement'] = $agreementId;
-        }
-        return $this->client->post('/requisitions/', $data);
+        return NordigenRequisition::parse($this->client->post('/requisitions/', $data));
     }
 
     /**

@@ -22,7 +22,10 @@ class BankAccountController extends Controller
         return ApiResponse::create()
             ->handle(function (ApiResponse $response) use ($request) {
                 return collect($request->getAccounts())->map(function (array $account) {
-                    return Auth::user()->member->bankAccount()->create($account);
+                    return Auth::user()->member->bankAccount()
+                        ->updateOrCreate([
+                            'iban' => $account['iban']
+                        ], $account);
                 })->toArray();
             })
             ->request($request)

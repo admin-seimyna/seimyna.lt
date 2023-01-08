@@ -1,17 +1,20 @@
 <template>
-    <VPage bubble-top-center
-           class="items-center px-10"
-    >
-        <Slider :slides="slides"></Slider>
+    <VPage>
+        <Slider :slides="slides">
+            <template #finances>
+                <DashboardFinances />
+            </template>
+        </Slider>
     </VPage>
 </template>
 <script>
 import VPage from '@/Components/Layout/Page';
 import Slider from '@/Elements/Slider/Slider';
+import DashboardFinances from '@/Components/Dashboard/Finances';
 
 export default {
     name: 'Dashboard',
-    components: {Slider, VPage},
+    components: {DashboardFinances, Slider, VPage},
     setup(props) {
         return {
             slides: [

@@ -22,13 +22,18 @@ export default {
     namespaced: true,
     state: {
         current: null,
+        list: [],
     },
     getters: {
         current: state => state.current,
+        list: state => state.list,
     },
     mutations: {
         current(state, value) {
             state.current = value;
+        },
+        list(state, value) {
+            state.list = value;
         }
     },
     actions: {},

@@ -24,6 +24,13 @@ class BankAccount extends Model
     ];
 
     /**
+     * @var string[]
+     */
+    protected $appends = [
+        'is_virtual'
+    ];
+
+    /**
      * @param Builder $builder
      * @return Builder
      */
@@ -39,5 +46,13 @@ class BankAccount extends Model
     public function scopeReal(Builder $builder): Builder
     {
         return $builder->whereNotNull('requisition_id');
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsVirtualAttribute(): bool
+    {
+        return !empty($this->uid);
     }
 }

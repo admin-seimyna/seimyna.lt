@@ -20,6 +20,9 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function() {
     Route::post('invitation/{type}/accept', [\App\Http\Controllers\Api\Auth\InvitationController::class, 'accept'])->name('invitation.accept');
 });
 
+// Requisition
+Route::get('/requisition/{userId}/{familyId}/activate', [\App\Http\Controllers\Api\Finances\RequisitionController::class, 'activate'])->name('requisition.activate');
+
 
 Route::group(['middleware' => 'auth:api'], function() {
 
@@ -53,6 +56,11 @@ Route::group(['middleware' => 'auth:api'], function() {
             Route::get('/{requisition}/accounts', [\App\Http\Controllers\Api\Finances\NordigenController::class, 'accounts'])->name('accounts');
             Route::get('/account/transactions/{account}', [\App\Http\Controllers\Api\Finances\NordigenController::class, 'transactions'])->name('transactions');
             Route::get('/account/balance/{account}', [\App\Http\Controllers\Api\Finances\NordigenController::class, 'balance'])->name('balance');
+        });
+
+        // Bank
+        Route::group(['prefix' => 'bank', 'as' => 'bank.'], function() {
+            Route::get('/list', [\App\Http\Controllers\Api\Finances\BankController::class, 'list'])->name('list');
         });
 
         // Accounts

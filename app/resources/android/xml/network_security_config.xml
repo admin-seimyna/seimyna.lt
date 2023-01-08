@@ -9,5 +9,6 @@
         <domain includeSubdomains="true">192.168.68.108</domain>
         <domain includeSubdomains="true">192.168.68.110</domain>
         <domain includeSubdomains="true">seimyna.lt</domain>
+        <domain includeSubdomains="true">https://ob.nordigen.com</domain>
     </domain-config>
 </network-security-config>

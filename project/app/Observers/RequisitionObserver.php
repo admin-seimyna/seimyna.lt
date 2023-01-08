@@ -15,5 +15,6 @@ class RequisitionObserver
         if (!$requisition->expires_at) {
             $requisition->expires_at = Carbon::now()->addDays(config('services.nordigen.expiration'));
         }
+        $requisition->ref = time().uniqid();
     }
 }

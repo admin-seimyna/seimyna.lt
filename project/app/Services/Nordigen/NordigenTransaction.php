@@ -17,7 +17,7 @@ class NordigenTransaction
     {
         return [
             'bank_account_id' => $accountId,
-            'uid' => $data['transactionId'],
+            'uid' => $data['transactionId'] ?? null,
             'name' => static::getName($data),
             'date' => static::getDate($data),
             'amount' => $data['transactionAmount']['amount'],

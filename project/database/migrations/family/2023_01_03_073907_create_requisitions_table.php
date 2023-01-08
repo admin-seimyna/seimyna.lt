@@ -17,8 +17,10 @@ class CreateRequisitionsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('bank_id');
             $table->unsignedBigInteger('member_id');
-            $table->string('uid');
-            $table->string('link');
+            $table->string('uid')->nullable();
+            $table->string('link')->nullable();
+            $table->string('redirect')->nullable();
+            $table->string('ref');
             $table->date('expires_at');
             $table->dateTime('activated_at')->nullable();
             $table->timestamps();

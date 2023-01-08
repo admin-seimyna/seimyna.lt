@@ -62,10 +62,20 @@ class ApiResponse
     }
 
     /**
-     * @param $callback
+     * @param string $commit
      * @return $this
      */
-    public function handle($callback): self
+    public function payload(string $commit): self
+    {
+        $this->data[$commit] = $this->builder->get();
+        return $this;
+    }
+
+    /**
+     * @param $callback|null
+     * @return $this
+     */
+    public function handle($callback = null): self
     {
         $data = is_string($callback) ? (new $callback($this->request))->get() : $callback($this);
         if (!is_array($data) && method_exists($data, 'toArray')) {

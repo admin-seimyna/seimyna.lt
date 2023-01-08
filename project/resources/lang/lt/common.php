@@ -13,5 +13,16 @@ return [
         'add' => 'Pridėti',
         'delete' => 'Šalinti',
         'save' => 'Išsaugoti',
+        'try_again' => 'Bandyti dar kartą'
+    ],
+
+    'confirmation' => [
+        'title' => [
+            'default' => 'Pranešimas',
+        ],
+
+        'message' => [
+            'default' => 'Ar tikrai norite atlikti šį veiksmą?',
+        ]
     ]
 ];

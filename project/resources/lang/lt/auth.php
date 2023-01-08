@@ -32,6 +32,7 @@ return [
 
     'button' => [
         'login' => 'Prisijungti',
+        'logout' => 'Atsijungti',
         'signup' => 'Registruotis',
         'send' => 'Siųsti',
         'forgot-password' => 'Pamiršote?',
@@ -39,4 +40,13 @@ return [
         'resend_verification_code' => 'Siųsti dar kartą',
         'has_invitation_code' => 'Turiu pakvietomo kodą',
     ],
+
+    'prompt' => [
+        'title' => [
+            'logout' => 'Atsijungti?'
+        ],
+        'message' => [
+            'logout' => 'Ar tikrai norite atsijungti?'
+        ]
+    ]
 ];

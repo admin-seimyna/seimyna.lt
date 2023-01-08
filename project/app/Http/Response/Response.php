@@ -31,11 +31,16 @@ class Response
     protected function login(?User $user = null): array
     {
         $user = $user ?? $this->auth()->user();
+        $token = $this->auth()->setTTl(config('jwt.long_term_ttl'))->login($user);
+        $family = $user->family()->first();
+        if ($family) {
+            $family->connect();
+        }
         return [
             'auth/user' => $user->load([
                 'verification'
             ]),
-            'auth/token' => $this->auth()->setTTl(config('jwt.long_term_ttl'))->login($user),
+            'auth/token' => $token,
         ];
     }
 }

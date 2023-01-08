@@ -17,6 +17,7 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('bank_account_id');
             $table->unsignedBigInteger('to_bank_account_id')->nullable();
+            $table->string('uid')->nullable();
             $table->string('name');
             $table->text('description')->nullable();
             $table->enum('type', \App\Enum\TransactionTypeEnum::values()->toArray());

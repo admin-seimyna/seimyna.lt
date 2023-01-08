@@ -16,6 +16,7 @@
         <Avatar :subject="user"
                 ignore-color
                 class="w-12 h-12 bg-gray-200"
+                @click="openUserMenu"
         />
     </div>
 </template>
@@ -23,8 +24,8 @@
 import Avatar from '@/Elements/Avatar';
 import {computed, inject} from 'vue';
 import {useStore} from 'vuex';
-import {useRouter} from 'vue-router';
 import FamilyCreate from '@/Components/Family/Create/Index';
+import UserMenu from '@/Components/Layout/UserMenu';
 
 export default {
     name: 'Navigation',
@@ -34,12 +35,19 @@ export default {
     setup(props) {
         const app = inject('app');
         const store = useStore();
-        const router = useRouter();
-
         return {
             user: computed(() => {
                 return store.getters['auth/user'];
             }),
+
+            openUserMenu() {
+                app.modal({
+                    component: UserMenu,
+                    options: {
+                        type: 'popup'
+                    }
+                });
+            },
 
             createFamily() {
                 app.modal({

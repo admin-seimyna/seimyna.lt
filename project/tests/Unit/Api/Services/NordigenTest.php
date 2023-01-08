@@ -30,7 +30,7 @@ class NordigenTest extends TestCase
             'bank' => $bank->id
         ]))->assertStatus(200)
             ->assertJsonStructure([
-                'id', 'link'
+                'link', 'redirect', 'id', 'activated_at'
             ]);
 
         $response = $this->get(route('api.finances.nordigen.accounts', [

@@ -34,7 +34,6 @@ return [
         'url' => env('NORDIGEN_URL'),
         'id' => env('NORDIGEN_ID'),
         'key' => env('NORDIGEN_KEY'),
-        'redirect' => env('NORDIGEN_REDIRECT'),
         'expiration' => 90,
     ]
 ];

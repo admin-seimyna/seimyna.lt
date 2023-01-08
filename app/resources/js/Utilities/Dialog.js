@@ -58,6 +58,23 @@ export default class Dialog {
     }
 
     /**
+     * Logout prompt
+     * @return {Promise<unknown>}
+     */
+    logout() {
+        return new Promise((resolve, reject) => {
+            this.confirm(
+                this.t('auth.prompt.title.logout'),
+                this.t('auth.prompt.message.logout'),
+                this.t('common.button.yes'),
+                this.t('common.button.no')
+            ).then((result) => {
+                result === 2 ? resolve() : reject();
+            });
+        });
+    }
+
+    /**
      * Confirm
      * @param title
      * @param message
@@ -85,8 +102,8 @@ export default class Dialog {
     defaultConfirm(title, message) {
         return new Promise((resolve, reject) => {
             this.confirm(
-                title,
-                message,
+                title || this.t('common.confirmation.title.default'),
+                message || this.t('common.confirmation.message.default'),
                 this.t('common.button.yes'),
                 this.t('common.button.no')
             ).then((result) => {

@@ -1,0 +1,56 @@
+.animated-icon {
+  &--success {
+    animation: successAnimation .5s .4s forwards;
+    > i {
+      animation: rubberBand .5s .9s ease;
+    }
+  }
+}
+
+@keyframes successAnimation {
+  from {
+    transform: rotate(180deg);
+    box-shadow: 0 0 0 0 theme('colors.success.500');
+  }
+  70% {
+    box-shadow: 0 0 0 20px theme('colors.success.500');
+  }
+
+  90% {
+    border-color: transparent;
+  }
+  to {
+    transform: none;
+    box-shadow: 0 0 0 2px theme('colors.success.500');
+  }
+}
+
+@keyframes rubberBand {
+  from {
+    transform: scale3d(1, 1, 1);
+  }
+
+  30% {
+    transform: scale3d(1.25, 0.75, 1);
+  }
+
+  40% {
+    transform: scale3d(0.75, 1.25, 1);
+  }
+
+  50% {
+    transform: scale3d(1.15, 0.85, 1);
+  }
+
+  65% {
+    transform: scale3d(0.95, 1.05, 1);
+  }
+
+  75% {
+    transform: scale3d(1.05, 0.95, 1);
+  }
+
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+}

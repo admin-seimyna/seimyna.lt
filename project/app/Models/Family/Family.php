@@ -21,6 +21,8 @@ class Family extends Model
 
     protected $connection = 'main';
 
+    const MOMENT_PREFIX = '_moment';
+
     /**
      * @var string[]
      */
@@ -36,27 +38,58 @@ class Family extends Model
 
     /**
      * Create and cache user connection settings
+     * @param bool $rememberForever
      */
-    public function connect()
+    public function connect(bool $rememberForever = true)
     {
         if (!Auth::check()) {
             return;
         }
 
-        $this->disconnect();
+        $this->disconnect($rememberForever);
+
+        if (!$rememberForever) {
+            Cache::remember(User::getFamilyKey() . static::MOMENT_PREFIX, 60, function () {
+                return $this->id;
+            });
+
+            Cache::remember(User::getConnectionKey() . static::MOMENT_PREFIX, 60, function () {
+                $clientConnection = static::getClientConnection();
+                static::setupConnection($clientConnection);
+                return $clientConnection;
+            });
+            return;
+        }
 
         Cache::rememberForever(User::getFamilyKey(), function () {
             return $this->id;
         });
         Cache::rememberForever(User::getConnectionKey(), function () {
-            $defaultConnection = config('database.connections.' . DB::getDefaultConnection());
-            $clientConnection = array_merge($defaultConnection, [
-                'database' => $this->connection_name
-            ]);
-            config(['database.connections.' . User::getConnectionKey() => $clientConnection]);
-            DB::setDefaultConnection(User::getConnectionKey());
+            $clientConnection = static::getClientConnection();
+            static::setupConnection($clientConnection);
             return $clientConnection;
         });
+    }
+
+    /**
+     * @return array
+     */
+    private function getClientConnection(): array
+    {
+        $defaultConnection = config('database.connections.' . DB::getDefaultConnection());
+        return array_merge($defaultConnection, [
+            'database' => $this->connection_name
+        ]);
+    }
+
+    /**
+     * @param array|null $connection
+     */
+    public static function setupConnection(?array $connection = null)
+    {
+        $connection = $connection ?? Cache::get(User::getConnectionKey());
+        config(['database.connections.' . User::getConnectionKey() => $connection]);
+        DB::setDefaultConnection(User::getConnectionKey());
     }
 
     /**
@@ -64,9 +97,9 @@ class Family extends Model
      */
     public function connectMoment(callable $callback): void
     {
-        $this->connect();
+        $this->connect(false);
         $callback();
-        $this->disconnect();
+        $this->disconnect(false);
     }
 
     /**
@@ -80,11 +113,12 @@ class Family extends Model
 
     /**
      * Destroy user connection settings
+     * @param bool $rememberForever
      */
-    public function disconnect(): void
+    public function disconnect(bool $rememberForever = true): void
     {
-        Cache::forget(User::getConnectionKey());
-        Cache::forget(User::getFamilyKey());
+        Cache::forget(User::getConnectionKey() . ($rememberForever ? '' : static::MOMENT_PREFIX));
+        Cache::forget(User::getFamilyKey() . ($rememberForever ? '' : static::MOMENT_PREFIX));
     }
 
     /**
